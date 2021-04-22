@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:udemy_flutter/models/user/user_model.dart';
 
 class UsersScreen extends StatelessWidget {
-  List<UserModel> users = [
+  final List<UserModel> users = [
     UserModel(
       id: 1,
       name: 'Abdullah Mansour',

@@ -8,15 +8,22 @@ import 'package:udemy_flutter/shared/components/components.dart';
 // 3. quality
 // 4. clean code
 
-class LoginScreen extends StatelessWidget
-{
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   var emailController = TextEditingController();
+
   var passwordController = TextEditingController();
+
   var formKey = GlobalKey<FormState>();
 
+  bool isPassword = true;
+
   @override
-  Widget build(BuildContext context)
-  {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -27,8 +34,7 @@ class LoginScreen extends StatelessWidget
               key: formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children:
-                [
+                children: [
                   Text(
                     'Login',
                     style: TextStyle(
@@ -44,10 +50,8 @@ class LoginScreen extends StatelessWidget
                     label: 'Email',
                     prefix: Icons.email,
                     type: TextInputType.emailAddress,
-                    validate: (String value)
-                    {
-                      if(value.isEmpty)
-                      {
+                    validate: (String value) {
+                      if (value.isEmpty) {
                         return 'email must not be empty';
                       }
 
@@ -61,13 +65,17 @@ class LoginScreen extends StatelessWidget
                     controller: passwordController,
                     label: 'Password',
                     prefix: Icons.lock,
-                    suffix: Icons.remove_red_eye,
-                    isPassword: true,
+                    suffix:
+                        isPassword ? Icons.visibility : Icons.visibility_off,
+                    suffixPressed: () {
+                      setState(() {
+                        isPassword = !isPassword;
+                      });
+                    },
+                    isPassword: isPassword,
                     type: TextInputType.visiblePassword,
-                    validate: (String value)
-                    {
-                      if(value.isEmpty)
-                      {
+                    validate: (String value) {
+                      if (value.isEmpty) {
                         return 'password is too short';
                       }
 
@@ -79,10 +87,8 @@ class LoginScreen extends StatelessWidget
                   ),
                   defaultButton(
                     text: 'login',
-                    function: ()
-                    {
-                      if(formKey.currentState.validate())
-                      {
+                    onPressed: () {
+                      if (formKey.currentState.validate()) {
                         print(emailController.text);
                         print(passwordController.text);
                       }
@@ -93,8 +99,7 @@ class LoginScreen extends StatelessWidget
                   ),
                   defaultButton(
                     text: 'ReGIster',
-                    function: ()
-                    {
+                    onPressed: () {
                       print(emailController.text);
                       print(passwordController.text);
                     },
