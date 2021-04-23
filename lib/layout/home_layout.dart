@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sqflite/sqflite.dart';
+// import 'package:sqflite/sqflite.dart';
 // import 'package:udemy_flutter/modules/archived_tasks/archived_tasks_screen.dart';
 // import 'package:udemy_flutter/modules/done_tasks/done_tasks_screen.dart';
 // import 'package:udemy_flutter/modules/new_tasks/new_task_screen.dart';
 import 'package:udemy_flutter/shared/components/components.dart';
-import 'package:udemy_flutter/shared/components/constants.dart';
+// import 'package:udemy_flutter/shared/components/constants.dart';
 import 'package:udemy_flutter/shared/cubit/app_cubit.dart';
 import 'package:udemy_flutter/shared/cubit/app_states.dart';
 
 class HomeLayout extends StatelessWidget {
-  Database database;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
-  var scaffoldKey = GlobalKey<ScaffoldState>();
-  var formKey = GlobalKey<FormState>();
-  bool isBottomSheetShown = false;
-
-  var titleController = TextEditingController();
-  var timeController = TextEditingController();
-  var dateController = TextEditingController();
+  final titleController = TextEditingController();
+  final timeController = TextEditingController();
+  final dateController = TextEditingController();
 
   /*@override
   void initState() {
@@ -30,9 +27,13 @@ class HomeLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AppCubit(),
+      create: (context) => AppCubit()..createDataBase(),
       child: BlocConsumer<AppCubit, AppStates>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is AppInsertDatabaseState) {
+            Navigator.pop(context);
+          }
+        },
         builder: (context, state) {
           var blocCubit = AppCubit.get(context);
           return Scaffold(
@@ -42,33 +43,43 @@ class HomeLayout extends StatelessWidget {
                 blocCubit.titles[blocCubit.currentIndex],
               ),
             ),
-            body: false //tasks.length == 0
+            body: state is AppGetDatabaseLoadingState //tasks.length == 0
                 ? Center(child: CircularProgressIndicator())
                 : blocCubit.screens[blocCubit.currentIndex],
             floatingActionButton: FloatingActionButton(
-              child: isBottomSheetShown ? Icon(Icons.done) : Icon(Icons.add),
+              child: blocCubit.isBottomSheetShown
+                  ? Icon(Icons.done)
+                  : Icon(Icons.add),
               onPressed: () async {
-                if (isBottomSheetShown) {
+                if (blocCubit.isBottomSheetShown) {
                   if (formKey.currentState.validate()) {
-                    insertToDatabase(
-                            title: titleController.text,
-                            time: timeController.text,
-                            date: dateController.text)
-                        .then((value) {
-                      getDataFromDatabase(database).then((value) {
-                        Navigator.pop(context);
-                        timeController.clear();
-                        titleController.clear();
-                        dateController.clear();
-                        //setState(() {
-                        tasks = value;
-                        // });
-                      }).catchError((onError) {
-                        print('${onError.toString()}');
-                      });
-                    }).catchError((onError) {
-                      print('${onError.toString()}');
-                    });
+                    await blocCubit.insertToDatabase(
+                        title: titleController.text,
+                        time: timeController.text,
+                        date: dateController.text);
+
+                    timeController.clear();
+                    titleController.clear();
+                    dateController.clear();
+                    // insertToDatabase(
+                    //         title: titleController.text,
+                    //         time: timeController.text,
+                    //         date: dateController.text)
+                    //     .then((value) {
+                    //   getDataFromDatabase(database).then((value) {
+                    //     Navigator.pop(context);
+                    //     timeController.clear();
+                    //     titleController.clear();
+                    //     dateController.clear();
+                    //     //setState(() {
+                    //     tasks = value;
+                    //     // });
+                    //   }).catchError((onError) {
+                    //     print('${onError.toString()}');
+                    //   });
+                    // }).catchError((onError) {
+                    //   print('${onError.toString()}');
+                    // });
                   }
                 } else {
                   {
@@ -165,10 +176,11 @@ class HomeLayout extends StatelessWidget {
                         )
                         .closed
                         .then((value) {
-                      isBottomSheetShown = !isBottomSheetShown;
+                      blocCubit.changeBottomSheetState(false);
                       // setState(() {});
                     });
-                    isBottomSheetShown = !isBottomSheetShown;
+                    blocCubit.changeBottomSheetState(true);
+
                     // setState(() {});
                   }
                 }
@@ -196,50 +208,5 @@ class HomeLayout extends StatelessWidget {
         },
       ),
     );
-  }
-
-  Future<void> createDataBase() async {
-    try {
-      database =
-          await openDatabase('todo.db', onCreate: (database, version) async {
-        await database.execute(
-            'CREATE TABLE tasks (id INTEGER PRIMARY KEY,title TEXT, date TEXT, time TEXT,status TEXT)');
-        print("Datbase created");
-      }, onOpen: (database) {
-        print("Datbase opened");
-        getDataFromDatabase(database).then((value) {
-          tasks = value;
-          // setState(() {});
-        }).catchError((onError) {
-          print('${onError.toString()}');
-        });
-      }, version: 1);
-    } catch (e) {
-      print('Error while creating or openenig DB');
-    }
-  }
-
-  Future insertToDatabase({
-    @required String title,
-    @required String time,
-    @required String date,
-  }) async {
-    try {
-      await database.transaction(
-        (txn) async {
-          var val = await txn.rawInsert(
-              'INSERT INTO tasks(title,date,time,status) VALUES("$title","$date","$time","New")');
-          print("$val inserted sussfully");
-          return val;
-        },
-      );
-    } catch (e) {
-      print('${e.toString()}');
-    }
-  }
-
-  Future<List<Map<String, dynamic>>> getDataFromDatabase(
-      Database database) async {
-    return await database.rawQuery('SELECT * FROM tasks');
   }
 }
