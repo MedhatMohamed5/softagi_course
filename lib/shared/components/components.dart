@@ -39,6 +39,8 @@ Widget defaultFormField({
   @required IconData prefix,
   IconData suffix,
   VoidCallback suffixPressed,
+  VoidCallback onTap,
+  bool readOnly = false,
 }) =>
     TextFormField(
       controller: controller,
@@ -47,6 +49,9 @@ Widget defaultFormField({
       onFieldSubmitted: onSubmit,
       onChanged: onChange,
       validator: validate,
+      onTap: onTap,
+      readOnly: readOnly,
+      textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(
         labelText: label,
         prefixIcon: Icon(
