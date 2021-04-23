@@ -64,7 +64,6 @@ class _HomeLayoutState extends State<HomeLayout> {
                       date: dateController.text)
                   .then((value) {
                 Navigator.pop(context);
-                isBottomSheetShown = !isBottomSheetShown;
                 timeController.clear();
                 titleController.clear();
                 dateController.clear();
@@ -74,98 +73,105 @@ class _HomeLayoutState extends State<HomeLayout> {
             }
           } else {
             {
-              scaffoldKey.currentState.showBottomSheet(
-                (context) => Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Form(
-                      key: formKey,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          defaultFormField(
-                            controller: titleController,
-                            type: TextInputType.text,
-                            validate: (value) {
-                              if (value.isEmpty)
-                                return 'title must not be empty';
-                              return null;
-                            },
-                            label: 'Task title',
-                            prefix: Icons.title,
+              scaffoldKey.currentState
+                  .showBottomSheet(
+                    (context) => Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              defaultFormField(
+                                controller: titleController,
+                                type: TextInputType.text,
+                                validate: (value) {
+                                  if (value.isEmpty)
+                                    return 'title must not be empty';
+                                  return null;
+                                },
+                                label: 'Task title',
+                                prefix: Icons.title,
+                              ),
+                              SizedBox(
+                                height: 12,
+                              ),
+                              defaultFormField(
+                                readOnly: true,
+                                controller: timeController,
+                                type: TextInputType.datetime,
+                                onTap: () {
+                                  showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
+                                  ).then((value) {
+                                    if (value != null) {
+                                      timeController.text =
+                                          value?.format(context);
+                                    }
+                                  });
+                                },
+                                validate: (value) {
+                                  if (value.isEmpty)
+                                    return 'time must not be empty';
+                                  return null;
+                                },
+                                label: 'Task time',
+                                prefix: Icons.watch_later_outlined,
+                              ),
+                              SizedBox(
+                                height: 12,
+                              ),
+                              defaultFormField(
+                                readOnly: true,
+                                controller: dateController,
+                                type: TextInputType.datetime,
+                                onTap: () {
+                                  showDatePicker(
+                                    firstDate: DateTime.now(),
+                                    lastDate:
+                                        DateTime.now().add(Duration(days: 365)),
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                  ).then((value) {
+                                    if (value != null) {
+                                      // dateController.text = DateFormat.
+                                      dateController.text =
+                                          DateFormat.yMMMEd().format(value);
+                                    }
+                                  });
+                                },
+                                validate: (value) {
+                                  if (value.isEmpty)
+                                    return 'date must not be empty';
+                                  return null;
+                                },
+                                label: 'Task date',
+                                prefix: Icons.calendar_today_outlined,
+                              ),
+                            ],
                           ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          defaultFormField(
-                            readOnly: true,
-                            controller: timeController,
-                            type: TextInputType.datetime,
-                            onTap: () {
-                              showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay.now(),
-                              ).then((value) {
-                                if (value != null) {
-                                  timeController.text = value?.format(context);
-                                }
-                              });
-                            },
-                            validate: (value) {
-                              if (value.isEmpty)
-                                return 'time must not be empty';
-                              return null;
-                            },
-                            label: 'Task time',
-                            prefix: Icons.watch_later_outlined,
-                          ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          defaultFormField(
-                            readOnly: true,
-                            controller: dateController,
-                            type: TextInputType.datetime,
-                            onTap: () {
-                              showDatePicker(
-                                firstDate: DateTime.now(),
-                                lastDate:
-                                    DateTime.now().add(Duration(days: 365)),
-                                context: context,
-                                initialDate: DateTime.now(),
-                              ).then((value) {
-                                if (value != null) {
-                                  // dateController.text = DateFormat.
-                                  dateController.text =
-                                      DateFormat.yMMMEd().format(value);
-                                }
-                              });
-                            },
-                            validate: (value) {
-                              if (value.isEmpty)
-                                return 'date must not be empty';
-                              return null;
-                            },
-                            label: 'Task date',
-                            prefix: Icons.calendar_today_outlined,
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                elevation: 15,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15),
-                  ),
-                ),
-              );
+                    elevation: 15,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                      ),
+                    ),
+                  )
+                  .closed
+                  .then((value) {
+                isBottomSheetShown = !isBottomSheetShown;
+                setState(() {});
+              });
               isBottomSheetShown = !isBottomSheetShown;
+              setState(() {});
             }
           }
-          setState(() {});
           //await insertToDatabase();
         },
       ),
