@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-// import 'package:udemy_flutter/layout/home_layout.dart';
+import 'package:udemy_flutter/layout/home_layout.dart';
 // import 'package:udemy_flutter/modules/bmi/bmi_screen.dart';
-import 'package:udemy_flutter/modules/counter/counter_screen.dart';
+// import 'package:udemy_flutter/modules/counter/counter_screen.dart';
 import 'package:udemy_flutter/shared/bloc_observer.dart';
 // import 'package:udemy_flutter/modules/login/login_screen.dart';
 // import 'package:udemy_flutter/modules/messenger/messenger_screen.dart';
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: CounterScreen(),
+      home: HomeLayout(),
     );
   }
 }
