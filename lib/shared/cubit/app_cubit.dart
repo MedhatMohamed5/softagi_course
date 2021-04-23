@@ -10,7 +10,9 @@ class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitialState());
 
   Database database;
-  List<Map<String, dynamic>> tasks = [];
+  List<Map<String, dynamic>> newTasks = [];
+  List<Map<String, dynamic>> doneTasks = [];
+  List<Map<String, dynamic>> archivedTasks = [];
 
   static AppCubit get(BuildContext context) =>
       BlocProvider.of<AppCubit>(context);
@@ -45,13 +47,7 @@ class AppCubit extends Cubit<AppStates> {
         },
         onOpen: (database) {
           print("Datbase opened");
-          getDataFromDatabase(database).then((value) {
-            tasks = value;
-            print(tasks);
-            emit(AppGetDatabaseState());
-          }).catchError((onError) {
-            print('${onError.toString()}');
-          });
+          getDataFromDatabase(database);
         },
         version: 1,
       );
@@ -76,26 +72,54 @@ class AppCubit extends Cubit<AppStates> {
           return val;
         },
       );
-      await getDataFromDatabase(database).then((value) {
-        tasks = value;
-        print(tasks);
-        emit(AppGetDatabaseState());
-      }).catchError((onError) {
-        print('${onError.toString()}');
-      });
+      getDataFromDatabase(database);
     } catch (e) {
       print('${e.toString()}');
     }
   }
 
-  Future<List<Map<String, dynamic>>> getDataFromDatabase(
-      Database database) async {
+  void getDataFromDatabase(Database database) {
+    newTasks = [];
+    doneTasks = [];
+    archivedTasks = [];
+
     emit(AppGetDatabaseLoadingState());
-    return await database.rawQuery('SELECT * FROM tasks');
+    database.rawQuery('SELECT * FROM tasks').then((value) {
+      value.forEach((task) {
+        if (task['status'] == 'New')
+          newTasks.add(task);
+        else if (task['status'] == 'Done')
+          doneTasks.add(task);
+        else if (task['status'] == 'Archive') archivedTasks.add(task);
+      });
+      emit(AppGetDatabaseState());
+    }).catchError((onError) {
+      print('${onError.toString()}');
+    });
   }
 
   void changeBottomSheetState(bool value) {
     isBottomSheetShown = value;
     emit(AppBottomSheetState());
+  }
+
+  void updateRecord({
+    @required String status,
+    @required int id,
+  }) {
+    database.rawUpdate('UPDATE tasks SET status = ? WHERE id = ?',
+        ['$status', id]).then((value) {
+      getDataFromDatabase(database);
+      emit(AppUpdateDatabaseState());
+    });
+  }
+
+  void deleteRecord({
+    @required int id,
+  }) {
+    database.rawDelete('Delete FROM tasks WHERE id = ?', [id]).then((value) {
+      getDataFromDatabase(database);
+      emit(AppDeleteDatabaseState());
+    });
   }
 }
