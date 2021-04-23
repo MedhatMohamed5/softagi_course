@@ -5,6 +5,7 @@ import 'package:udemy_flutter/modules/archived_tasks/archived_tasks_screen.dart'
 import 'package:udemy_flutter/modules/done_tasks/done_tasks_screen.dart';
 import 'package:udemy_flutter/modules/new_tasks/new_task_screen.dart';
 import 'package:udemy_flutter/shared/components/components.dart';
+import 'package:udemy_flutter/shared/components/constants.dart';
 
 class HomeLayout extends StatefulWidget {
   const HomeLayout({Key key}) : super(key: key);
@@ -52,7 +53,9 @@ class _HomeLayoutState extends State<HomeLayout> {
           titles[currentIndex],
         ),
       ),
-      body: screens[currentIndex],
+      body: tasks.length == 0
+          ? Center(child: CircularProgressIndicator())
+          : screens[currentIndex],
       floatingActionButton: FloatingActionButton(
         child: isBottomSheetShown ? Icon(Icons.done) : Icon(Icons.add),
         onPressed: () async {
@@ -63,10 +66,17 @@ class _HomeLayoutState extends State<HomeLayout> {
                       time: timeController.text,
                       date: dateController.text)
                   .then((value) {
-                Navigator.pop(context);
-                timeController.clear();
-                titleController.clear();
-                dateController.clear();
+                getDataFromDatabase(database).then((value) {
+                  Navigator.pop(context);
+                  timeController.clear();
+                  titleController.clear();
+                  dateController.clear();
+                  setState(() {
+                    tasks = value;
+                  });
+                }).catchError((onError) {
+                  print('${onError.toString()}');
+                });
               }).catchError((onError) {
                 print('${onError.toString()}');
               });
@@ -201,6 +211,12 @@ class _HomeLayoutState extends State<HomeLayout> {
         print("Datbase created");
       }, onOpen: (database) {
         print("Datbase opened");
+        getDataFromDatabase(database).then((value) {
+          tasks = value;
+          setState(() {});
+        }).catchError((onError) {
+          print('${onError.toString()}');
+        });
       }, version: 1);
     } catch (e) {
       print('Error while creating or openenig DB');
@@ -224,5 +240,10 @@ class _HomeLayoutState extends State<HomeLayout> {
     } catch (e) {
       print('${e.toString()}');
     }
+  }
+
+  Future<List<Map<String, dynamic>>> getDataFromDatabase(
+      Database database) async {
+    return await database.rawQuery('SELECT * FROM tasks');
   }
 }
