@@ -6,7 +6,7 @@ class DioHelper {
 
   DioHelper._();
 
-  static init() {
+  static void init() {
     _dio = Dio(
       BaseOptions(
         baseUrl: 'https://newsapi.org/v2/',

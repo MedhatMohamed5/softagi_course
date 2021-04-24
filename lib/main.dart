@@ -10,15 +10,19 @@ import 'package:udemy_flutter/layout/news_app/news_layout.dart';
 import 'package:udemy_flutter/shared/bloc_observer.dart';
 import 'package:udemy_flutter/shared/cubit/todo_app/app_cubit.dart';
 import 'package:udemy_flutter/shared/cubit/todo_app/app_states.dart';
+import 'package:udemy_flutter/shared/network/local/cache_helper.dart';
 import 'package:udemy_flutter/shared/network/remote/dio_helper.dart';
 // import 'package:udemy_flutter/modules/login/login_screen.dart';
 // import 'package:udemy_flutter/modules/messenger/messenger_screen.dart';
 // import 'package:udemy_flutter/modules/users/users_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
-  runApp(MyApp());
+  await CacheHelper.init();
+  bool isDark = CacheHelper.getBoolean(key: 'isDark');
+  runApp(MyApp(isDark: isDark));
 }
 
 // Stateless
@@ -29,11 +33,14 @@ void main() {
 class MyApp extends StatelessWidget {
   // constructor
   // build
+  final bool isDark;
 
+  const MyApp({Key key, this.isDark}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AppCubit(),
+      create: (BuildContext context) =>
+          AppCubit()..changeAppMode(fromShared: this.isDark),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -43,7 +50,7 @@ class MyApp extends StatelessWidget {
                 textDirection: TextDirection.rtl, child: NewsLayout()),
             theme: ThemeData(
               appBarTheme: AppBarTheme(
-                iconTheme: IconThemeData(color: Colors.grey),
+                iconTheme: IconThemeData(color: Colors.black),
                 backwardsCompatibility: false,
                 systemOverlayStyle: SystemUiOverlayStyle(
                   statusBarColor: Colors.white,

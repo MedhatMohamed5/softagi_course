@@ -5,6 +5,7 @@ import 'package:udemy_flutter/modules/archived_tasks/archived_tasks_screen.dart'
 import 'package:udemy_flutter/modules/done_tasks/done_tasks_screen.dart';
 import 'package:udemy_flutter/modules/new_tasks/new_task_screen.dart';
 import 'package:udemy_flutter/shared/cubit/todo_app/app_states.dart';
+import 'package:udemy_flutter/shared/network/local/cache_helper.dart';
 
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitialState());
@@ -124,8 +125,15 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   bool isDark = false;
-  void changeAppMode() {
-    isDark = !isDark;
-    emit(AppChangeModeState());
+  void changeAppMode({bool fromShared}) {
+    if (fromShared != null) {
+      isDark = fromShared;
+      emit(AppChangeModeState());
+    } else {
+      isDark = !isDark;
+      CacheHelper.putBoolean(key: 'isDark', value: isDark).then((value) {
+        emit(AppChangeModeState());
+      });
+    }
   }
 }
