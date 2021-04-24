@@ -7,8 +7,8 @@ import 'package:intl/intl.dart';
 // import 'package:udemy_flutter/modules/new_tasks/new_task_screen.dart';
 import 'package:udemy_flutter/shared/components/components.dart';
 // import 'package:udemy_flutter/shared/components/constants.dart';
-import 'package:udemy_flutter/shared/cubit/app_cubit.dart';
-import 'package:udemy_flutter/shared/cubit/app_states.dart';
+import 'package:udemy_flutter/shared/cubit/todo_app/app_cubit.dart';
+import 'package:udemy_flutter/shared/cubit/todo_app/app_states.dart';
 
 class HomeLayout extends StatelessWidget {
   final scaffoldKey = GlobalKey<ScaffoldState>();

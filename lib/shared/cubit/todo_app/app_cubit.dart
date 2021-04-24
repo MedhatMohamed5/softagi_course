@@ -4,7 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:udemy_flutter/modules/archived_tasks/archived_tasks_screen.dart';
 import 'package:udemy_flutter/modules/done_tasks/done_tasks_screen.dart';
 import 'package:udemy_flutter/modules/new_tasks/new_task_screen.dart';
-import 'package:udemy_flutter/shared/cubit/app_states.dart';
+import 'package:udemy_flutter/shared/cubit/todo_app/app_states.dart';
 
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitialState());

@@ -1,5 +1,7 @@
+import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
-import 'package:udemy_flutter/shared/cubit/app_cubit.dart';
+import 'package:udemy_flutter/shared/cubit/news_app/news_states.dart';
+import 'package:udemy_flutter/shared/cubit/todo_app/app_cubit.dart';
 
 Widget defaultButton({
   double width = double.infinity,
@@ -171,3 +173,83 @@ Widget buildTasksList(List<Map<String, dynamic>> tasks) => tasks.length == 0
         ),
         itemCount: tasks.length,
       );
+
+Widget buildArticleItem(Map<String, dynamic> model) => Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        children: [
+          Container(
+            width: 120,
+            height: 120,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage('${model['urlToImage']}'),
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          Expanded(
+            child: Container(
+              height: 120,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      '${model['title']}',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${model['author'] ?? ''}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Text(
+                        '${model['publishedAt']}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+Widget buildNewsList(List list, NewsStates state) => ConditionalBuilder(
+      condition: state is! NewsGetScienceLoadingState,
+      builder: (context) => ListView.separated(
+        physics: BouncingScrollPhysics(),
+        itemBuilder: (BuildContext context, int index) {
+          return buildArticleItem(list[index]);
+        },
+        itemCount: list.length,
+        separatorBuilder: (BuildContext context, int index) => Divider(
+          height: 1,
+        ),
+      ),
+      fallback: (context) => Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
