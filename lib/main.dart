@@ -8,6 +8,7 @@ import 'package:udemy_flutter/layout/news_app/news_layout.dart';
 // import 'package:udemy_flutter/modules/bmi/bmi_screen.dart';
 // import 'package:udemy_flutter/modules/counter/counter_screen.dart';
 import 'package:udemy_flutter/shared/bloc_observer.dart';
+import 'package:udemy_flutter/shared/cubit/news_app/news_cubit.dart';
 import 'package:udemy_flutter/shared/cubit/todo_app/app_cubit.dart';
 import 'package:udemy_flutter/shared/cubit/todo_app/app_states.dart';
 import 'package:udemy_flutter/shared/network/local/cache_helper.dart';
@@ -38,17 +39,30 @@ class MyApp extends StatelessWidget {
   const MyApp({Key key, this.isDark}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) =>
-          AppCubit()..changeAppMode(fromShared: this.isDark),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (BuildContext context) =>
+              AppCubit()..changeAppMode(fromShared: this.isDark),
+        ),
+        BlocProvider(
+          create: (context) => NewsCubit()
+            ..getBusiness()
+            ..getSports()
+            ..getScience(),
+        ),
+      ],
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},
         builder: (context, state) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             home: Directionality(
-                textDirection: TextDirection.rtl, child: NewsLayout()),
+              textDirection: TextDirection.rtl,
+              child: NewsLayout(),
+            ),
             theme: ThemeData(
+              brightness: Brightness.light,
               appBarTheme: AppBarTheme(
                 iconTheme: IconThemeData(color: Colors.black),
                 backwardsCompatibility: false,
@@ -67,6 +81,12 @@ class MyApp extends StatelessWidget {
               scaffoldBackgroundColor: Colors.white,
               primarySwatch: Colors.teal,
               textTheme: TextTheme(
+                subtitle1: Theme.of(context).textTheme.subtitle1.copyWith(
+                      color: Colors.black,
+                    ),
+                bodyText2: Theme.of(context).textTheme.bodyText2.copyWith(
+                      color: Colors.black,
+                    ),
                 bodyText1: TextStyle(
                   color: Colors.black,
                   fontSize: 18,
@@ -83,6 +103,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
             darkTheme: ThemeData(
+              brightness: Brightness.dark,
               appBarTheme: AppBarTheme(
                 iconTheme: IconThemeData(color: Colors.white),
                 backwardsCompatibility: false,
@@ -98,8 +119,18 @@ class MyApp extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              inputDecorationTheme: InputDecorationTheme(
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              hintColor: Colors.white,
+              iconTheme: IconThemeData(color: Colors.white),
               scaffoldBackgroundColor: HexColor('333739'),
               primarySwatch: Colors.teal,
+              // primaryColor: Colors.white,
               floatingActionButtonTheme: FloatingActionButtonThemeData(
                 backgroundColor: Colors.teal,
               ),
@@ -111,6 +142,12 @@ class MyApp extends StatelessWidget {
                 type: BottomNavigationBarType.fixed,
               ),
               textTheme: TextTheme(
+                subtitle1: Theme.of(context).textTheme.subtitle1.copyWith(
+                      color: Colors.white,
+                    ),
+                bodyText2: Theme.of(context).textTheme.bodyText2.copyWith(
+                      color: Colors.white,
+                    ),
                 bodyText1: TextStyle(
                   color: Colors.white,
                   fontSize: 18,

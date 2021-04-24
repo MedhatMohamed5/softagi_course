@@ -50,7 +50,9 @@ class NewsCubit extends Cubit<NewsStates> {
   void changeBottomNavBat(int index) {
     currentIndex = index;
     emit(NewsBottomNavState());
-    if (index == 1)
+    if (index == 0)
+      getBusiness();
+    else if (index == 1)
       getSports();
     else if (index == 2) getScience();
   }
@@ -73,7 +75,7 @@ class NewsCubit extends Cubit<NewsStates> {
         emit(NewsGetBusinessSucessState());
       }).catchError((error) {
         print(error.toString());
-        emit(NewsGetBusinessFailureState(error.toString()));
+        emit(NewsGetBusinessFailureState(error.response.data['message']));
       });
     } else {
       emit(NewsGetBusinessSucessState());
@@ -98,7 +100,7 @@ class NewsCubit extends Cubit<NewsStates> {
         emit(NewsGetSportsSucessState());
       }).catchError((error) {
         print(error.toString());
-        emit(NewsGetSportsFailureState(error.toString()));
+        emit(NewsGetSportsFailureState(error.response.data['message']));
       });
     } else {
       emit(NewsGetSportsSucessState());
@@ -123,10 +125,32 @@ class NewsCubit extends Cubit<NewsStates> {
         emit(NewsGetScienceSucessState());
       }).catchError((error) {
         print(error.toString());
-        emit(NewsGetScienceFailureState(error.toString()));
+        emit(NewsGetScienceFailureState(error.response.data['message']));
       });
     } else {
       emit(NewsGetScienceSucessState());
     }
+  }
+
+  List<Map<String, dynamic>> search = [];
+
+  void getSearch(String value) {
+    search = [];
+    emit(NewsGetSearchLoadingState());
+
+    DioHelper.getData(url: 'everything', query: {
+      'q': value,
+      'apikey': 'bbfd1d1e40ea474a97003c37b2f2a103',
+    }).then((value) {
+      // printWrapped(value.data['articles'][1]['title']);
+      search = (value.data['articles'] as List)
+          .map((e) => e as Map<String, dynamic>)
+          ?.toList();
+      // printWrapped(business.toString());
+      emit(NewsGetSearchSucessState());
+    }).catchError((error) {
+      print(error.toString());
+      emit(NewsGetSearchFailureState(error.response.data['message']));
+    });
   }
 }

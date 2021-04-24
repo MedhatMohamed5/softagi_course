@@ -238,20 +238,38 @@ Widget buildArticleItem(Map<String, dynamic> model, BuildContext context) =>
     );
 
 Widget buildNewsList(List list, NewsStates state) => ConditionalBuilder(
-      condition: state is! NewsGetScienceLoadingState,
-      builder: (context) => ListView.separated(
-        physics: BouncingScrollPhysics(),
-        itemBuilder: (BuildContext context, int index) {
-          return buildArticleItem(list[index], context);
-        },
-        itemCount: list.length,
-        separatorBuilder: (BuildContext context, int index) => Divider(
-          thickness: 1,
-          height: 1,
-          color: Colors.grey,
+      condition: state is! NewsLoadingState,
+      builder: (context) => ConditionalBuilder(
+        condition: state is! NewsErrorState,
+        builder: (context) => ListView.separated(
+          physics: BouncingScrollPhysics(),
+          itemBuilder: (BuildContext context, int index) {
+            return buildArticleItem(list[index], context);
+          },
+          itemCount: list.length,
+          separatorBuilder: (BuildContext context, int index) => Divider(
+            thickness: 1,
+            height: 1,
+            color: Colors.grey,
+          ),
         ),
+        fallback: (context) {
+          if (state is NewsErrorState) return errorWidget(state.error);
+          return Container();
+        },
       ),
       fallback: (context) => Center(
         child: CircularProgressIndicator(),
       ),
+    );
+
+void navigateTo(BuildContext context, Widget widget) => Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => widget,
+      ),
+    );
+
+Widget errorWidget(String error) => Center(
+      child: Text('Something went wrong! $error'),
     );
