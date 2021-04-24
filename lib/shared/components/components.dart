@@ -1,5 +1,6 @@
 import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:udemy_flutter/modules/web_view/web_view_screen.dart';
 import 'package:udemy_flutter/shared/cubit/news_app/news_states.dart';
 import 'package:udemy_flutter/shared/cubit/todo_app/app_cubit.dart';
 
@@ -175,65 +176,76 @@ Widget buildTasksList(List<Map<String, dynamic>> tasks) => tasks.length == 0
       );
 
 Widget buildArticleItem(Map<String, dynamic> model, BuildContext context) =>
-    Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        children: [
-          Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              image: model['urlToImage'] != null
-                  ? DecorationImage(
-                      image: NetworkImage('${model['urlToImage']}'),
-                      fit: BoxFit.cover,
-                    )
-                  : null,
-              borderRadius: BorderRadius.circular(15),
-            ),
+    InkWell(
+      onTap: () {
+        navigateTo(
+          context,
+          WebViewScreen(
+            url: model['url'],
+            title: model['title'],
           ),
-          SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            child: Container(
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              width: 120,
               height: 120,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      '${model['title']}',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${model['author'] ?? ''}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      Text(
-                        '${model['publishedAt']}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+              decoration: BoxDecoration(
+                image: model['urlToImage'] != null
+                    ? DecorationImage(
+                        image: NetworkImage('${model['urlToImage']}'),
+                        fit: BoxFit.cover,
+                      )
+                    : null,
+                borderRadius: BorderRadius.circular(15),
               ),
             ),
-          ),
-        ],
+            SizedBox(
+              width: 20,
+            ),
+            Expanded(
+              child: Container(
+                height: 120,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '${model['title']}',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${model['author'] ?? ''}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Text(
+                          '${model['publishedAt']}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
 
