@@ -174,7 +174,8 @@ Widget buildTasksList(List<Map<String, dynamic>> tasks) => tasks.length == 0
         itemCount: tasks.length,
       );
 
-Widget buildArticleItem(Map<String, dynamic> model) => Padding(
+Widget buildArticleItem(Map<String, dynamic> model, BuildContext context) =>
+    Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
         children: [
@@ -182,10 +183,12 @@ Widget buildArticleItem(Map<String, dynamic> model) => Padding(
             width: 120,
             height: 120,
             decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage('${model['urlToImage']}'),
-                fit: BoxFit.cover,
-              ),
+              image: model['urlToImage'] != null
+                  ? DecorationImage(
+                      image: NetworkImage('${model['urlToImage']}'),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
               borderRadius: BorderRadius.circular(15),
             ),
           ),
@@ -204,10 +207,7 @@ Widget buildArticleItem(Map<String, dynamic> model) => Padding(
                       '${model['title']}',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
                   Column(
@@ -242,11 +242,13 @@ Widget buildNewsList(List list, NewsStates state) => ConditionalBuilder(
       builder: (context) => ListView.separated(
         physics: BouncingScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-          return buildArticleItem(list[index]);
+          return buildArticleItem(list[index], context);
         },
         itemCount: list.length,
         separatorBuilder: (BuildContext context, int index) => Divider(
+          thickness: 1,
           height: 1,
+          color: Colors.grey,
         ),
       ),
       fallback: (context) => Center(
