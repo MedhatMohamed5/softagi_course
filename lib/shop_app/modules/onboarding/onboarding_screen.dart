@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:udemy_flutter/shop_app/modules/login/shop_login_screen.dart';
 import 'package:udemy_flutter/shop_app/shared/components/components.dart';
+import 'package:udemy_flutter/shop_app/shared/network/local/shop_cache_helper.dart';
 import 'package:udemy_flutter/shop_app/shared/styles/colors.dart';
 
 class BoardingModel {
@@ -53,7 +54,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             onPressed: () {
-              navigateToReplacement(context, ShopLoginScreen());
+              _skipOrNavigate(context);
             },
           ),
         ],
@@ -103,7 +104,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                     onPressed: () {
                       if (isLast) {
-                        navigateToReplacement(context, ShopLoginScreen());
+                        _skipOrNavigate(context);
                       } else {
                         controller.nextPage(
                           duration: Duration(
@@ -121,6 +122,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
       ),
     );
+  }
+
+  void _skipOrNavigate(BuildContext context) {
+    ShopCacheHelper.saveData(key: 'onBoarding', value: true).then((value) {
+      if (value) {
+        navigateToReplacement(context, ShopLoginScreen());
+      }
+    });
   }
 
   Widget buildPageItem(BoardingModel model) => Column(

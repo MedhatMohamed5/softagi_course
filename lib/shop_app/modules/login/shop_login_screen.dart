@@ -5,7 +5,9 @@ import 'package:udemy_flutter/shop_app/modules/login/cubit/login_cubit.dart';
 import 'package:udemy_flutter/shop_app/modules/login/cubit/login_states.dart';
 import 'package:udemy_flutter/shop_app/modules/register/shop_register_screen.dart';
 import 'package:udemy_flutter/shop_app/shared/components/components.dart';
+import 'package:udemy_flutter/shop_app/shared/network/local/shop_cache_helper.dart';
 import 'package:udemy_flutter/shop_app/shared/styles/colors.dart';
+import 'package:udemy_flutter/shop_app/layout/shop_layout.dart';
 
 class ShopLoginScreen extends StatelessWidget {
   final emailController = TextEditingController();
@@ -23,6 +25,22 @@ class ShopLoginScreen extends StatelessWidget {
             if (state.loginModel.status) {
               print(state.loginModel.message);
               print(state.loginModel.data.token);
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.loginModel.message),
+                  backgroundColor: defaultColor,
+                ),
+              );
+              ShopCacheHelper.saveData(
+                key: 'token',
+                value: state.loginModel.data.token,
+              );
+
+              navigateToReplacement(
+                context,
+                ShopLayout(),
+              );
             } else {
               print(state.loginModel.message);
               ScaffoldMessenger.of(context).showSnackBar(
