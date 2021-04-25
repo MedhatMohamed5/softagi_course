@@ -107,6 +107,7 @@ class ShopLoginScreen extends StatelessWidget {
                           return null;
                         },
                         label: 'Password',
+                        textCapitalization: TextCapitalization.none,
                         prefix: Icons.lock,
                         isPassword: ShopLoginCubit.get(context).isPassword,
                         suffix: ShopLoginCubit.get(context).suffixIcon,

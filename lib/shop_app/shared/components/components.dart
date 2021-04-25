@@ -66,6 +66,7 @@ Widget defaultFormField({
   VoidCallback suffixPressed,
   VoidCallback onTap,
   bool readOnly = false,
+  TextCapitalization textCapitalization = TextCapitalization.sentences,
 }) =>
     TextFormField(
       controller: controller,
@@ -76,7 +77,7 @@ Widget defaultFormField({
       validator: validate,
       onTap: onTap,
       readOnly: readOnly,
-      textCapitalization: TextCapitalization.sentences,
+      textCapitalization: textCapitalization,
       decoration: InputDecoration(
         labelText: label,
         prefixIcon: Icon(
