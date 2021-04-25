@@ -1,3 +1,5 @@
 import 'package:flutter/material.dart';
 
-const defaultColor = Colors.teal;
+const Color defaultColor = Colors.teal;
+const Color errorColor = Colors.red;
+const Color warningColor = Colors.yellow;

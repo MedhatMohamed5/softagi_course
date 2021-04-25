@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:udemy_flutter/shop_app/models/login/shop_login_model.dart';
 import 'package:udemy_flutter/shop_app/modules/login/cubit/login_states.dart';
 import 'package:udemy_flutter/shop_app/shared/network/endpoints.dart';
 import 'package:udemy_flutter/shop_app/shared/network/remote/shop_dio_helper.dart';
@@ -21,6 +22,7 @@ class ShopLoginCubit extends Cubit<ShopLoginStates> {
     emit(ShopLoginShowPasswordState());
   }
 
+  ShopLoginModel loginModel;
   void userLogin({
     @required String email,
     @required String password,
@@ -31,12 +33,9 @@ class ShopLoginCubit extends Cubit<ShopLoginStates> {
       url: LOGIN,
       data: {'email': '$email', 'password': '$password'},
     ).then((value) {
-      print(value.data);
+      loginModel = ShopLoginModel.fromJson(value.data);
 
-      if (value.data['status'] == false)
-        emit(ShopLoginErrorState(value.data['message']));
-      else
-        emit(ShopLoginSuccessState());
+      emit(ShopLoginSuccessState(loginModel));
     }).catchError((error) {
       print(error);
       emit(ShopLoginErrorState(error.toString()));

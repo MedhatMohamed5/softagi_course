@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:udemy_flutter/shop_app/shared/styles/colors.dart';
 
 void navigateTo(
@@ -91,4 +92,18 @@ Widget defaultFormField({
             : null,
         border: OutlineInputBorder(),
       ),
+    );
+
+Future<bool> showToast({
+  @required String message,
+  @required Color backgroundColor,
+}) =>
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 5,
+      backgroundColor: backgroundColor,
+      textColor: Colors.white,
+      fontSize: 16.0,
     );

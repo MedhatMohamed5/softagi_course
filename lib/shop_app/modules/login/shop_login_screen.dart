@@ -5,6 +5,7 @@ import 'package:udemy_flutter/shop_app/modules/login/cubit/login_cubit.dart';
 import 'package:udemy_flutter/shop_app/modules/login/cubit/login_states.dart';
 import 'package:udemy_flutter/shop_app/modules/register/shop_register_screen.dart';
 import 'package:udemy_flutter/shop_app/shared/components/components.dart';
+import 'package:udemy_flutter/shop_app/shared/styles/colors.dart';
 
 class ShopLoginScreen extends StatelessWidget {
   final emailController = TextEditingController();
@@ -17,7 +18,26 @@ class ShopLoginScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => ShopLoginCubit(),
       child: BlocConsumer<ShopLoginCubit, ShopLoginStates>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is ShopLoginSuccessState) {
+            if (state.loginModel.status) {
+              print(state.loginModel.message);
+              print(state.loginModel.data.token);
+            } else {
+              print(state.loginModel.message);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.loginModel.message),
+                  backgroundColor: errorColor,
+                ),
+              );
+              /*showToast(
+                message: state.loginModel.message,
+                backgroundColor: errorColor,
+              );*/
+            }
+          }
+        },
         builder: (context, state) => Scaffold(
           appBar: AppBar(),
           body: Center(

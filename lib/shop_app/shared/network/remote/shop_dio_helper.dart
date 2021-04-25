@@ -47,7 +47,6 @@ class ShopDioHelper {
         'Authorization': authorizationToken,
       },
     );
-    print(_dio.options.headers);
     return await _dio.post(url, data: data, queryParameters: query);
   }
 }
