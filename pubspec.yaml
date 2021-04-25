@@ -36,6 +36,7 @@ dependencies:
   hexcolor: ^2.0.3
   shared_preferences: ^2.0.5
   webview_flutter: ^2.0.4
+  smooth_page_indicator: ^0.2.3
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +54,13 @@ flutter:
 
   assets:
     - assets/images/
+
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo/Cairo-Regular.ttf
+        - asset: assets/fonts/Cairo/Cairo-Bold.ttf
+          weight: 700
 
   # To add assets to your application, add an assets section, like this:
 
