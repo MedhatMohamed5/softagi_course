@@ -11,9 +11,11 @@ import 'package:udemy_flutter/shared/bloc_observer.dart';
 // import 'package:udemy_flutter/shared/cubit/news_app/news_cubit.dart';
 import 'package:udemy_flutter/shared/cubit/todo_app/app_cubit.dart';
 import 'package:udemy_flutter/shared/cubit/todo_app/app_states.dart';
-import 'package:udemy_flutter/shared/network/local/cache_helper.dart';
-import 'package:udemy_flutter/shared/network/remote/dio_helper.dart';
+// import 'package:udemy_flutter/shared/network/local/cache_helper.dart';
+// import 'package:udemy_flutter/shared/network/remote/dio_helper.dart';
 import 'package:udemy_flutter/shop_app/modules/onboarding/onboarding_screen.dart';
+import 'package:udemy_flutter/shop_app/shared/network/local/shop_cache_helper.dart';
+import 'package:udemy_flutter/shop_app/shared/network/remote/shop_dio_helper.dart';
 import 'package:udemy_flutter/shop_app/shared/styles/themes.dart';
 // import 'package:udemy_flutter/modules/login/login_screen.dart';
 // import 'package:udemy_flutter/modules/messenger/messenger_screen.dart';
@@ -22,9 +24,13 @@ import 'package:udemy_flutter/shop_app/shared/styles/themes.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
-  DioHelper.init();
-  await CacheHelper.init();
-  bool isDark = CacheHelper.getBoolean(key: 'isDark');
+  // DioHelper.init();
+  // await CacheHelper.init();
+
+  ShopDioHelper.init();
+  await ShopCacheHelper.init();
+
+  bool isDark = ShopCacheHelper.getBoolean(key: 'isDark');
   runApp(MyApp(isDark: isDark));
 }
 

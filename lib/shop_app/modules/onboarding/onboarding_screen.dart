@@ -43,7 +43,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          TextButton(
+            child: Text(
+              'SKIP',
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            onPressed: () {
+              navigateToReplacement(context, ShopLoginScreen());
+            },
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(30.0),
@@ -81,7 +95,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                   TextButton(
-                    child: Text('Next'),
+                    child: Text(
+                      isLast ? 'Start' : 'Next',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
                     onPressed: () {
                       if (isLast) {
                         navigateToReplacement(context, ShopLoginScreen());
