@@ -11,6 +11,7 @@ import 'package:udemy_flutter/shared/bloc_observer.dart';
 // import 'package:udemy_flutter/shared/cubit/news_app/news_cubit.dart';
 import 'package:udemy_flutter/shared/cubit/todo_app/app_cubit.dart';
 import 'package:udemy_flutter/shared/cubit/todo_app/app_states.dart';
+import 'package:udemy_flutter/shop_app/layout/cubit/shop_cubit.dart';
 import 'package:udemy_flutter/shop_app/modules/login/shop_login_screen.dart';
 // import 'package:udemy_flutter/shared/network/local/cache_helper.dart';
 // import 'package:udemy_flutter/shared/network/remote/dio_helper.dart';
@@ -72,6 +73,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (BuildContext context) =>
               AppCubit()..changeAppMode(fromShared: this.isDark),
+        ),
+        BlocProvider(
+          create: (context) => ShopCubit()..getHomeData(),
         ),
         /*BlocProvider(
           create: (context) => NewsCubit()

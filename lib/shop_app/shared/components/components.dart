@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:udemy_flutter/shop_app/modules/login/shop_login_screen.dart';
+import 'package:udemy_flutter/shop_app/shared/network/local/shop_cache_helper.dart';
 import 'package:udemy_flutter/shop_app/shared/styles/colors.dart';
 
 void navigateTo(
@@ -107,4 +109,13 @@ Future<bool> showToast({
       backgroundColor: backgroundColor,
       textColor: Colors.white,
       fontSize: 16.0,
+    );
+
+void signOut(BuildContext context) =>
+    ShopCacheHelper.removeData(key: 'token').then(
+      (value) {
+        if (value) {
+          navigateToReplacement(context, ShopLoginScreen());
+        }
+      },
     );
