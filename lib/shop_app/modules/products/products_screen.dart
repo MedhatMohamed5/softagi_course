@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:udemy_flutter/shop_app/layout/cubit/shop_cubit.dart';
 import 'package:udemy_flutter/shop_app/layout/cubit/shop_states.dart';
 import 'package:udemy_flutter/shop_app/models/home/home_model.dart';
+import 'package:udemy_flutter/shop_app/shared/styles/colors.dart';
 
 class ProductsScreen extends StatelessWidget {
   @override
@@ -29,13 +30,119 @@ class ProductsScreen extends StatelessWidget {
     @required BuildContext context,
     @required HomeModel model,
   }) {
-    return Column(
-      children: [
-        _carouselSlider(model),
-        SizedBox(
-          height: 10,
+    return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          _carouselSlider(model),
+          SizedBox(
+            height: 10,
+          ),
+          _gridView(model),
+        ],
+      ),
+    );
+  }
+
+  Widget _gridView(HomeModel model) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: GridView.count(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        crossAxisCount: 2,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        childAspectRatio: 1 / 1.58,
+        children: List.generate(
+          model.data.products.length,
+          (index) => _productItem(model.data.products[index]),
         ),
-      ],
+      ),
+    );
+  }
+
+  Widget _productItem(ProductModel model) {
+    // print('${model.name} - ${model.image}');
+    return Card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            alignment: AlignmentDirectional.bottomStart,
+            children: [
+              Center(
+                child: Image(
+                  image: NetworkImage(model.image),
+                  height: 200,
+                ),
+              ),
+              if (model.discount > 0)
+                Container(
+                  color: Colors.red,
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Text(
+                    'DISCOUNT',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8, top: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    model.name,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: TextStyle(height: 1.3),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '${model.price}',
+                        style: TextStyle(
+                          height: 1.3,
+                          color: defaultColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      if (model.discount > 0)
+                        Text(
+                          '${model.oldPrice}',
+                          style: TextStyle(
+                            height: 1.3,
+                            color: Colors.grey,
+                            decoration: TextDecoration.lineThrough,
+                            decorationColor: Colors.red,
+                          ),
+                        ),
+                      Spacer(),
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        icon: Icon(
+                          Icons.favorite_border,
+                        ),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
