@@ -31,3 +31,15 @@ class ShopGetCategoriesErrorState extends ShopErrorState {
 
   ShopGetCategoriesErrorState(this.error) : super(error);
 }
+
+class ShopToggleFavoriteSucessState extends ShopStates {
+  final String message;
+
+  ShopToggleFavoriteSucessState({this.message});
+}
+
+class ShopToggleFavoriteErrorState extends ShopErrorState {
+  final String error;
+
+  ShopToggleFavoriteErrorState(this.error) : super(error);
+}

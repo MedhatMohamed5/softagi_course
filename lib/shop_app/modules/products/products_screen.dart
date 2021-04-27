@@ -12,7 +12,17 @@ class ProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShopCubit, ShopStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is ShopToggleFavoriteSucessState) {
+          if (state.message != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+              ),
+            );
+          }
+        }
+      },
       builder: (context, state) {
         var shopCubit = ShopCubit.get(context);
         return ConditionalBuilder(
@@ -54,7 +64,7 @@ class ProductsScreen extends StatelessWidget {
               ],
             ),
           ),
-          _gridView(homeModel),
+          _gridView(context: context, model: homeModel),
         ],
       ),
     );
@@ -112,7 +122,8 @@ class ProductsScreen extends StatelessWidget {
     );
   }
 
-  Widget _gridView(HomeModel model) {
+  Widget _gridView(
+      {@required BuildContext context, @required HomeModel model}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: GridView.count(
@@ -124,13 +135,15 @@ class ProductsScreen extends StatelessWidget {
         childAspectRatio: 1 / 1.58,
         children: List.generate(
           model.data.products.length,
-          (index) => _productItem(model.data.products[index]),
+          (index) =>
+              _productItem(context: context, model: model.data.products[index]),
         ),
       ),
     );
   }
 
-  Widget _productItem(ProductModel model) {
+  Widget _productItem(
+      {@required BuildContext context, @required ProductModel model}) {
     // print('${model.name} - ${model.image}');
     return Card(
       child: Column(
@@ -198,10 +211,23 @@ class ProductsScreen extends StatelessWidget {
                       Spacer(),
                       IconButton(
                         padding: EdgeInsets.zero,
-                        icon: Icon(
-                          Icons.favorite_border,
+                        icon: CircleAvatar(
+                          backgroundColor:
+                              ShopCubit.get(context).favorites[model.id]
+                                  ? defaultColor
+                                  : Colors.grey,
+                          radius: 15,
+                          child: Center(
+                            child: Icon(
+                              Icons.favorite_border,
+                              size: 16,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          ShopCubit.get(context).changeFavorite(model.id);
+                        },
                       ),
                     ],
                   ),
