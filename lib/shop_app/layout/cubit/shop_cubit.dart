@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:udemy_flutter/shop_app/layout/cubit/shop_states.dart';
+import 'package:udemy_flutter/shop_app/models/home/categories_model.dart';
 import 'package:udemy_flutter/shop_app/models/home/home_model.dart';
 import 'package:udemy_flutter/shop_app/modules/categories/categories_screen.dart';
 import 'package:udemy_flutter/shop_app/modules/favorites/favorites_screen.dart';
@@ -29,7 +30,7 @@ class ShopCubit extends Cubit<ShopStates> {
     emit(ShopChangeBottomNavState());
   }
 
-  HomeModel model;
+  HomeModel homeModel;
 
   void getHomeData() {
     emit(ShopGetHomeLoadingState());
@@ -40,14 +41,34 @@ class ShopCubit extends Cubit<ShopStates> {
       lang: 'en',
       authorizationToken: ShopCacheHelper.getData(key: 'token'),
     ).then((value) {
-      model = HomeModel.fromJson(value.data);
+      homeModel = HomeModel.fromJson(value.data);
 
       // printWrapped(value.data.toString());
-      printWrapped(model.data.banners[0].image);
-      printWrapped(model.data.banners[0].id.toString());
+      printWrapped(homeModel.data.banners[0].image);
+      printWrapped(homeModel.data.banners[0].id.toString());
       emit(ShopGetHomeSucessState());
     }).catchError((error) {
       emit(ShopGetHomeErrorState(error));
+    });
+  }
+
+  CategoriesModel categoriesModel;
+  void getCategoriesData() {
+    emit(ShopGetCategoriesLoadingState());
+
+    ShopDioHelper.getData(
+      url: CATEGORIES,
+      query: null,
+      lang: 'en',
+      authorizationToken: ShopCacheHelper.getData(key: 'token'),
+    ).then((value) {
+      categoriesModel = CategoriesModel.fromJson(value.data);
+
+      // printWrapped(value.data.toString());
+      printWrapped(categoriesModel.data.data[0].name);
+      emit(ShopGetCategoriesSucessState());
+    }).catchError((error) {
+      emit(ShopGetCategoriesErrorState(error));
     });
   }
 }

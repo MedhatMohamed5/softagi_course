@@ -21,3 +21,13 @@ class ShopGetHomeErrorState extends ShopErrorState {
 
   ShopGetHomeErrorState(this.error) : super(error);
 }
+
+class ShopGetCategoriesLoadingState extends ShopLoadingState {}
+
+class ShopGetCategoriesSucessState extends ShopStates {}
+
+class ShopGetCategoriesErrorState extends ShopErrorState {
+  final String error;
+
+  ShopGetCategoriesErrorState(this.error) : super(error);
+}

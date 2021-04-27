@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:udemy_flutter/shop_app/layout/cubit/shop_cubit.dart';
 import 'package:udemy_flutter/shop_app/layout/cubit/shop_states.dart';
+import 'package:udemy_flutter/shop_app/models/home/categories_model.dart';
 import 'package:udemy_flutter/shop_app/models/home/home_model.dart';
 import 'package:udemy_flutter/shop_app/shared/styles/colors.dart';
 
@@ -15,11 +16,13 @@ class ProductsScreen extends StatelessWidget {
       builder: (context, state) {
         var shopCubit = ShopCubit.get(context);
         return ConditionalBuilder(
-          condition: shopCubit.model != null,
+          condition:
+              shopCubit.homeModel != null && shopCubit.categoriesModel != null,
           fallback: (context) => Center(child: CircularProgressIndicator()),
           builder: (context) => _productsBuilder(
             context: context,
-            model: shopCubit.model,
+            homeModel: shopCubit.homeModel,
+            categoriesModel: shopCubit.categoriesModel,
           ),
         );
       },
@@ -28,17 +31,82 @@ class ProductsScreen extends StatelessWidget {
 
   Widget _productsBuilder({
     @required BuildContext context,
-    @required HomeModel model,
+    @required HomeModel homeModel,
+    @required CategoriesModel categoriesModel,
   }) {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _carouselSlider(model),
+          _carouselSlider(homeModel),
           SizedBox(
             height: 10,
           ),
-          _gridView(model),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _headerTitle('Categories'),
+                _categoriesList(categoriesModel.data.data),
+                _headerTitle('New Products'),
+              ],
+            ),
+          ),
+          _gridView(homeModel),
+        ],
+      ),
+    );
+  }
+
+  Widget _categoriesList(List<CategoryModel> categoriesList) {
+    return Container(
+      height: 100,
+      child: ListView.separated(
+        physics: BouncingScrollPhysics(),
+        itemBuilder: (context, index) => _categoryItem(categoriesList[index]),
+        separatorBuilder: (context, index) => SizedBox(
+          width: 5,
+        ),
+        itemCount: categoriesList.length,
+        scrollDirection: Axis.horizontal,
+      ),
+    );
+  }
+
+  Widget _headerTitle(String title) {
+    return Text(
+      title,
+      style: TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: 24,
+      ),
+    );
+  }
+
+  Widget _categoryItem(CategoryModel categoryModel) {
+    return Card(
+      child: Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+        children: [
+          Image(
+            image: NetworkImage(categoryModel.image),
+            fit: BoxFit.cover,
+            height: 100,
+            width: 100,
+          ),
+          Container(
+            width: 100,
+            color: Colors.black.withOpacity(0.8),
+            child: Text(
+              categoryModel.name,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
         ],
       ),
     );

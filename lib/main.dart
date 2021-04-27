@@ -75,7 +75,9 @@ class MyApp extends StatelessWidget {
               AppCubit()..changeAppMode(fromShared: this.isDark),
         ),
         BlocProvider(
-          create: (context) => ShopCubit()..getHomeData(),
+          create: (context) => ShopCubit()
+            ..getHomeData()
+            ..getCategoriesData(),
         ),
         /*BlocProvider(
           create: (context) => NewsCubit()
