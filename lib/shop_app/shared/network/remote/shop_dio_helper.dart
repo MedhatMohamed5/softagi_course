@@ -49,6 +49,22 @@ class ShopDioHelper {
     );
     return await _dio.post(url, data: data, queryParameters: query);
   }
+
+  static Future<Response> putData({
+    @required String url,
+    @required Map<String, dynamic> data,
+    Map<String, dynamic> query,
+    String lang = 'ar',
+    String authorizationToken = '',
+  }) async {
+    _dio.options.headers.addAll(
+      {
+        'lang': lang,
+        'Authorization': authorizationToken,
+      },
+    );
+    return await _dio.put(url, data: data, queryParameters: query);
+  }
 }
 
 void printWrapped(String text) {

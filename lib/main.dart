@@ -36,7 +36,7 @@ void main() async {
   bool isDark = ShopCacheHelper.getData(key: 'isDark');
   bool onBoarding = ShopCacheHelper.getData(key: 'onBoarding');
   String token = ShopCacheHelper.getData(key: 'token');
-
+  print(token);
   Widget startWidget;
 
   if (onBoarding != null) {
@@ -78,7 +78,8 @@ class MyApp extends StatelessWidget {
           create: (context) => ShopCubit()
             ..getHomeData()
             ..getCategoriesData()
-            ..getFavoritesData(),
+            ..getFavoritesData()
+            ..getUserData(),
         ),
         /*BlocProvider(
           create: (context) => NewsCubit()

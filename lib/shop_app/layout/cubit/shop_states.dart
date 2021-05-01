@@ -1,3 +1,5 @@
+import 'package:udemy_flutter/shop_app/models/login/shop_login_model.dart';
+
 abstract class ShopStates {}
 
 class ShopInitState extends ShopStates {}
@@ -40,6 +42,34 @@ class ShopGetFavoritesErrorState extends ShopErrorState {
   final String error;
 
   ShopGetFavoritesErrorState(this.error) : super(error);
+}
+
+class ShopGetUserLoadingState extends ShopLoadingState {}
+
+class ShopGetUserSucessState extends ShopStates {
+  final ShopLoginModel loginModel;
+
+  ShopGetUserSucessState(this.loginModel);
+}
+
+class ShopGetUserErrorState extends ShopErrorState {
+  final String error;
+
+  ShopGetUserErrorState(this.error) : super(error);
+}
+
+class ShopUpdateUserLoadingState extends ShopLoadingState {}
+
+class ShopUpdateUserSucessState extends ShopStates {
+  final ShopLoginModel loginModel;
+
+  ShopUpdateUserSucessState(this.loginModel);
+}
+
+class ShopUpdateUserErrorState extends ShopErrorState {
+  final String error;
+
+  ShopUpdateUserErrorState(this.error) : super(error);
 }
 
 class ShopToggleFavoriteSucessState extends ShopStates {

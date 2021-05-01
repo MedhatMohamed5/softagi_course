@@ -42,6 +42,7 @@ class ProductModel {
   String image;
   String name;
   bool inFavorites;
+  String description;
   bool inCart;
 
   ProductModel.fromJson(Map<String, dynamic> json) {
@@ -49,9 +50,22 @@ class ProductModel {
     image = json['image'];
     name = json['name'];
     inFavorites = json['in_favorites'];
+    description = json['description'];
     inCart = json['in_cart'];
     price = double.tryParse(json['price'].toString());
     oldPrice = double.tryParse(json['old_price'].toString());
     discount = double.tryParse(json['discount'].toString());
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['price'] = this.price;
+    data['old_price'] = this.oldPrice;
+    data['discount'] = this.discount;
+    data['image'] = this.image;
+    data['name'] = this.name;
+    data['description'] = this.description;
+    return data;
   }
 }

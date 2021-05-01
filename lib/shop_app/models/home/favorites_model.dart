@@ -1,3 +1,5 @@
+import 'package:udemy_flutter/shop_app/models/home/home_model.dart';
+
 class FavoritesModel {
   bool status;
   Null message;
@@ -99,7 +101,7 @@ class FavoritesDateModel {
 
 class FavoriteModel {
   int id;
-  Product product;
+  ProductModel product;
 
   FavoriteModel({
     this.id,
@@ -108,8 +110,9 @@ class FavoriteModel {
 
   FavoriteModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    product =
-        json['product'] != null ? new Product.fromJson(json['product']) : null;
+    product = json['product'] != null
+        ? new ProductModel.fromJson(json['product'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -122,7 +125,7 @@ class FavoriteModel {
   }
 }
 
-class Product {
+/*class Product {
   int id;
   double price;
   double oldPrice;
@@ -163,3 +166,4 @@ class Product {
     return data;
   }
 }
+*/

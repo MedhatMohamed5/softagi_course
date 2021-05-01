@@ -5,6 +5,7 @@ import 'package:udemy_flutter/shop_app/models/home/categories_model.dart';
 import 'package:udemy_flutter/shop_app/models/home/change_favorite_model.dart';
 import 'package:udemy_flutter/shop_app/models/home/favorites_model.dart';
 import 'package:udemy_flutter/shop_app/models/home/home_model.dart';
+import 'package:udemy_flutter/shop_app/models/login/shop_login_model.dart';
 import 'package:udemy_flutter/shop_app/modules/categories/categories_screen.dart';
 import 'package:udemy_flutter/shop_app/modules/favorites/favorites_screen.dart';
 import 'package:udemy_flutter/shop_app/modules/products/products_screen.dart';
@@ -124,5 +125,44 @@ class ShopCubit extends Cubit<ShopStates> {
         emit(ShopToggleFavoriteErrorState(error));
       },
     );
+  }
+
+  ShopLoginModel userModel;
+  void getUserData() {
+    emit(ShopGetUserLoadingState());
+
+    ShopDioHelper.getData(
+      url: PROFILE,
+      query: null,
+      lang: 'en',
+      authorizationToken: ShopCacheHelper.getData(key: 'token'),
+    ).then((value) {
+      userModel = ShopLoginModel.fromJson(value.data);
+
+      // printWrapped(value.data.toString());
+      printWrapped(userModel.data.name);
+      emit(ShopGetUserSucessState(userModel));
+    }).catchError((error) {
+      emit(ShopGetUserErrorState(error));
+    });
+  }
+
+  void updateUserData(Map<String, dynamic> data) {
+    emit(ShopUpdateUserLoadingState());
+
+    ShopDioHelper.putData(
+      url: UPDATE_PROFILE,
+      data: data,
+      lang: 'en',
+      authorizationToken: ShopCacheHelper.getData(key: 'token'),
+    ).then((value) {
+      userModel = ShopLoginModel.fromJson(value.data);
+
+      // printWrapped(value.data.toString());
+      printWrapped(userModel.data.name);
+      emit(ShopUpdateUserSucessState(userModel));
+    }).catchError((error) {
+      emit(ShopUpdateUserErrorState(error));
+    });
   }
 }
