@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:udemy_flutter/shop_app/layout/cubit/shop_states.dart';
 import 'package:udemy_flutter/shop_app/models/home/categories_model.dart';
 import 'package:udemy_flutter/shop_app/models/home/change_favorite_model.dart';
+import 'package:udemy_flutter/shop_app/models/home/favorites_model.dart';
 import 'package:udemy_flutter/shop_app/models/home/home_model.dart';
 import 'package:udemy_flutter/shop_app/modules/categories/categories_screen.dart';
 import 'package:udemy_flutter/shop_app/modules/favorites/favorites_screen.dart';
@@ -80,6 +81,26 @@ class ShopCubit extends Cubit<ShopStates> {
     });
   }
 
+  FavoritesModel favoritesModel;
+  void getFavoritesData() {
+    emit(ShopGetFavoritesLoadingState());
+
+    ShopDioHelper.getData(
+      url: FAVORITES,
+      query: null,
+      lang: 'en',
+      authorizationToken: ShopCacheHelper.getData(key: 'token'),
+    ).then((value) {
+      favoritesModel = FavoritesModel.fromJson(value.data);
+
+      // printWrapped(value.data.toString());
+      printWrapped(favoritesModel.data.data[0].product.name);
+      emit(ShopGetFavoritesSucessState());
+    }).catchError((error) {
+      emit(ShopGetFavoritesErrorState(error));
+    });
+  }
+
   ChangeFavoriteModel changeFavoriteModel;
   void changeFavorite(int productId) {
     favorites[productId] = !favorites[productId];
@@ -92,6 +113,8 @@ class ShopCubit extends Cubit<ShopStates> {
       changeFavoriteModel = ChangeFavoriteModel.fromJson(value.data);
       if (!changeFavoriteModel.status) {
         favorites[productId] = !favorites[productId];
+      } else {
+        getFavoritesData();
       }
       print(value.data);
       emit(ShopToggleFavoriteSucessState(message: changeFavoriteModel.message));
