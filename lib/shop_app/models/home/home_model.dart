@@ -52,9 +52,9 @@ class ProductModel {
     inFavorites = json['in_favorites'];
     description = json['description'];
     inCart = json['in_cart'];
-    price = double.tryParse(json['price'].toString());
-    oldPrice = double.tryParse(json['old_price'].toString());
-    discount = double.tryParse(json['discount'].toString());
+    price = double.tryParse(json['price'].toString()) ?? 0;
+    oldPrice = double.tryParse(json['old_price'].toString()) ?? 0;
+    discount = double.tryParse(json['discount'].toString()) ?? 0;
   }
 
   Map<String, dynamic> toJson() {

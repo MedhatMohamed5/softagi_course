@@ -1,21 +1,21 @@
 import 'package:udemy_flutter/shop_app/models/home/home_model.dart';
 
-class FavoritesModel {
+class SearchModel {
   bool status;
   Null message;
-  FavoritesDataModel data;
+  SearchDataModel data;
 
-  FavoritesModel({
+  SearchModel({
     this.status,
     this.message,
     this.data,
   });
 
-  FavoritesModel.fromJson(Map<String, dynamic> json) {
+  SearchModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     data = json['data'] != null
-        ? new FavoritesDataModel.fromJson(json['data'])
+        ? new SearchDataModel.fromJson(json['data'])
         : null;
   }
 
@@ -30,9 +30,9 @@ class FavoritesModel {
   }
 }
 
-class FavoritesDataModel {
+class SearchDataModel {
   int currentPage;
-  List<FavoriteModel> data;
+  List<ProductModel> data;
   String firstPageUrl;
   int from;
   int lastPage;
@@ -44,7 +44,7 @@ class FavoritesDataModel {
   int to;
   int total;
 
-  FavoritesDataModel({
+  SearchDataModel({
     this.currentPage,
     this.data,
     this.firstPageUrl,
@@ -59,12 +59,12 @@ class FavoritesDataModel {
     this.total,
   });
 
-  FavoritesDataModel.fromJson(Map<String, dynamic> json) {
+  SearchDataModel.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
     if (json['data'] != null) {
       data = [];
       json['data'].forEach((v) {
-        data.add(new FavoriteModel.fromJson(v));
+        data.add(new ProductModel.fromJson(v));
       });
     }
     firstPageUrl = json['first_page_url'];
@@ -98,72 +98,3 @@ class FavoritesDataModel {
     return data;
   }
 }
-
-class FavoriteModel {
-  int id;
-  ProductModel product;
-
-  FavoriteModel({
-    this.id,
-    this.product,
-  });
-
-  FavoriteModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    product = json['product'] != null
-        ? new ProductModel.fromJson(json['product'])
-        : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    if (this.product != null) {
-      data['product'] = this.product.toJson();
-    }
-    return data;
-  }
-}
-
-/*class Product {
-  int id;
-  double price;
-  double oldPrice;
-  int discount;
-  String image;
-  String name;
-  String description;
-
-  Product({
-    this.id,
-    this.price,
-    this.oldPrice,
-    this.discount,
-    this.image,
-    this.name,
-    this.description,
-  });
-
-  Product.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    price = double.tryParse(json['price'].toString());
-    oldPrice = double.tryParse(json['old_price'].toString());
-    discount = json['discount'];
-    image = json['image'];
-    name = json['name'];
-    description = json['description'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['price'] = this.price;
-    data['old_price'] = this.oldPrice;
-    data['discount'] = this.discount;
-    data['image'] = this.image;
-    data['name'] = this.name;
-    data['description'] = this.description;
-    return data;
-  }
-}
-*/
