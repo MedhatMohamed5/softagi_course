@@ -24,6 +24,7 @@ class SearchScreen extends StatelessWidget {
                 title: TextFormField(
                   controller: searchController,
                   keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.go,
                   onFieldSubmitted: (value) {
                     if (value.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -61,6 +62,15 @@ class SearchScreen extends StatelessWidget {
                   // List of products
                   if (state is SearchSucessState)
                     _buildResultView(searchCubit, context),
+                  if (state is SearchInitialState)
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          'Please Enter something to search',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
