@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,20 +13,23 @@ import 'package:udemy_flutter/shared/bloc_observer.dart';
 import 'package:udemy_flutter/shared/cubit/todo_app/app_cubit.dart';
 import 'package:udemy_flutter/shared/cubit/todo_app/app_states.dart';
 import 'package:udemy_flutter/shop_app/layout/cubit/shop_cubit.dart';
-import 'package:udemy_flutter/shop_app/modules/login/shop_login_screen.dart';
+// import 'package:udemy_flutter/shop_app/modules/login/shop_login_screen.dart';
 // import 'package:udemy_flutter/shared/network/local/cache_helper.dart';
 // import 'package:udemy_flutter/shared/network/remote/dio_helper.dart';
-import 'package:udemy_flutter/shop_app/modules/onboarding/onboarding_screen.dart';
+// import 'package:udemy_flutter/shop_app/modules/onboarding/onboarding_screen.dart';
 import 'package:udemy_flutter/shop_app/shared/network/local/shop_cache_helper.dart';
 import 'package:udemy_flutter/shop_app/shared/network/remote/shop_dio_helper.dart';
 import 'package:udemy_flutter/shop_app/shared/styles/themes.dart';
 // import 'package:udemy_flutter/modules/login/login_screen.dart';
 // import 'package:udemy_flutter/modules/messenger/messenger_screen.dart';
 // import 'package:udemy_flutter/modules/users/users_screen.dart';
-import 'package:udemy_flutter/shop_app/layout/shop_layout.dart';
+// import 'package:udemy_flutter/shop_app/layout/shop_layout.dart';
+import 'package:udemy_flutter/social_app/modules/login/social_login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   Bloc.observer = MyBlocObserver();
   // DioHelper.init();
   // await CacheHelper.init();
@@ -34,19 +38,20 @@ void main() async {
   await ShopCacheHelper.init();
 
   bool isDark = ShopCacheHelper.getData(key: 'isDark');
-  bool onBoarding = ShopCacheHelper.getData(key: 'onBoarding');
+  // bool onBoarding = ShopCacheHelper.getData(key: 'onBoarding');
   String token = ShopCacheHelper.getData(key: 'token');
   print(token);
   Widget startWidget;
 
-  if (onBoarding != null) {
+  /*if (onBoarding != null) {
     if (token != null)
       startWidget = ShopLayout();
     else
       startWidget = ShopLoginScreen();
   } else {
     startWidget = OnboardingScreen();
-  }
+  }*/
+  startWidget = SocialLoginScreen();
 
   runApp(MyApp(
     isDark: isDark,
