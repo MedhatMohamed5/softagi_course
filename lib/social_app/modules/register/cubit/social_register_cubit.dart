@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:udemy_flutter/social_app/models/social_user_model.dart';
 import 'package:udemy_flutter/social_app/modules/register/cubit/social_register_states.dart';
 
 class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
@@ -30,30 +32,43 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
 
     FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password)
-        .then((value) {
+        .then((value) async {
       print(value.user.toString());
 
-      emit(SocialRegisterSuccessState());
+      await createUser(
+        userModel: SocialUserModel(
+          uid: value.user.uid,
+          email: value.user.email,
+          phone: phone,
+          name: name,
+        ),
+      );
+      if (state is SocialCreateUserSuccessState) {
+        emit(SocialRegisterSuccessState());
+      }
+      if (state is SocialCreateUserErrorState) {
+        SocialCreateUserErrorState current =
+            state as SocialCreateUserErrorState;
+        emit(SocialRegisterErrorState(current.error));
+      }
     }).catchError((error) {
-      print(error.toString());
-      emit(SocialRegisterErrorState(error.toString()));
+      print(error.message.toString());
+      emit(SocialRegisterErrorState(error.message.toString()));
     });
+  }
 
-    // SocialDioHelper.postData(
-    //   url: REGISTER,
-    //   data: {
-    //     'email': '$email',
-    //     'password': '$password',
-    //     'name': name,
-    //     'phone': phone,
-    //   },
-    // ).then((value) {
-    //   loginModel = SocialLoginModel.fromJson(value.data);
+  Future<void> createUser({@required SocialUserModel userModel}) async {
+    emit(SocialCreateUserLoadingState());
 
-    //   emit(SocialRegisterSuccessState(loginModel));
-    // }).catchError((error) {
-    //   print(error);
-    //   emit(SocialRegisterErrorState(error.toString()));
-    // });
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userModel.uid)
+        .set(userModel.toJson())
+        .then((value) {
+      emit(SocialCreateUserSuccessState());
+    }).catchError((error) {
+      print(error.message.toString());
+      emit(SocialCreateUserErrorState(error.message.toString()));
+    });
   }
 }

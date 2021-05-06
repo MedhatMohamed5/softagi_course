@@ -1,9 +1,11 @@
 import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:udemy_flutter/social_app/layout/social_layout.dart';
 import 'package:udemy_flutter/social_app/modules/register/cubit/social_register_cubit.dart';
 import 'package:udemy_flutter/social_app/modules/register/cubit/social_register_states.dart';
 import 'package:udemy_flutter/social_app/shared/components/components.dart';
+import 'package:udemy_flutter/social_app/shared/styles/colors.dart';
 
 class SocialRegisterScreen extends StatelessWidget {
   final emailController = TextEditingController();
@@ -18,40 +20,58 @@ class SocialRegisterScreen extends StatelessWidget {
       create: (BuildContext context) => SocialRegisterCubit(),
       child: BlocConsumer<SocialRegisterCubit, SocialRegisterStates>(
         listener: (context, state) {
-          // if (state is SocialRegisterSuccessState) {
-          //   if (state.loginModel.status) {
-          //     print(state.loginModel.message);
-          //     print(state.loginModel.data.token);
+          if (state is SocialRegisterSuccessState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Registered Successfully'),
+                backgroundColor: defaultColor,
+              ),
+            );
 
-          //     ScaffoldMessenger.of(context).showSnackBar(
-          //       SnackBar(
-          //         content: Text(state.loginModel.message),
-          //         backgroundColor: defaultColor,
-          //       ),
-          //     );
-          //     SocialCacheHelper.saveData(
-          //       key: 'token',
-          //       value: state.loginModel.data.token,
-          //     );
+            navigateToReplacement(
+              context,
+              SocialLayout(),
+            );
+          } else if (state is SocialErrorState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.error),
+                backgroundColor: errorColor,
+              ),
+            );
+            //   if (state.loginModel.status) {
+            //     print(state.loginModel.message);
+            //     print(state.loginModel.data.token);
 
-          //     navigateToReplacement(
-          //       context,
-          //       SocialLayout(),
-          //     );
-          //   } else {
-          //     print(state.loginModel.message);
-          //     ScaffoldMessenger.of(context).showSnackBar(
-          //       SnackBar(
-          //         content: Text(state.loginModel.message),
-          //         backgroundColor: errorColor,
-          //       ),
-          //     );
-          //     /*showToast(
-          //       message: state.loginModel.message,
-          //       backgroundColor: errorColor,
-          //     );*/
-          //   }
-          // }
+            //     ScaffoldMessenger.of(context).showSnackBar(
+            //       SnackBar(
+            //         content: Text(state.loginModel.message),
+            //         backgroundColor: defaultColor,
+            //       ),
+            //     );
+            //     SocialCacheHelper.saveData(
+            //       key: 'token',
+            //       value: state.loginModel.data.token,
+            //     );
+
+            //     navigateToReplacement(
+            //       context,
+            //       SocialLayout(),
+            //     );
+            //   } else {
+            //     print(state.loginModel.message);
+            //     ScaffoldMessenger.of(context).showSnackBar(
+            //       SnackBar(
+            //         content: Text(state.loginModel.message),
+            //         backgroundColor: errorColor,
+            //       ),
+            //     );
+            //     /*showToast(
+            //       message: state.loginModel.message,
+            //       backgroundColor: errorColor,
+            //     );*/
+            //   }
+          }
         },
         builder: (context, state) {
           var registerCubit = SocialRegisterCubit.get(context);
