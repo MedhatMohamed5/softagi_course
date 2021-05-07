@@ -3,19 +3,22 @@ class SocialUserModel {
   String uid;
   String email;
   String phone;
+  bool isEmailVerified;
 
   SocialUserModel({
     this.uid,
     this.name,
     this.email,
     this.phone,
+    this.isEmailVerified,
   });
 
   SocialUserModel.fromJson(String uid, Map<String, dynamic> json) {
-    uid = uid;
-    name = json['name'] ?? '';
-    email = json['email'] ?? '';
-    phone = json['phone'] ?? '';
+    this.uid = uid;
+    this.name = json['name'] ?? '';
+    this.email = json['email'] ?? '';
+    this.phone = json['phone'] ?? '';
+    this.isEmailVerified = json['isEmailVerified'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
@@ -23,6 +26,7 @@ class SocialUserModel {
     data['name'] = this.name;
     data['email'] = this.email;
     data['phone'] = this.phone;
+    data['isEmailVerified'] = this.isEmailVerified;
     return data;
   }
 }

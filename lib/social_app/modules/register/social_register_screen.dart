@@ -167,7 +167,9 @@ class SocialRegisterScreen extends StatelessWidget {
                         ),
                         ConditionalBuilder(
                           condition: registerCubit.state
-                              is! SocialRegisterLoadingState,
+                                  is! SocialRegisterLoadingState ||
+                              registerCubit.state
+                                  is! SocialCreateUserLoadingState,
                           builder: (context) => defaultButton(
                             onPressed: () {
                               _submitForm(context, registerCubit);

@@ -1,10 +1,14 @@
 import 'package:conditional_builder/conditional_builder.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:udemy_flutter/social_app/layout/social_layout.dart';
 import 'package:udemy_flutter/social_app/modules/login/cubit/social_login_cubit.dart';
 import 'package:udemy_flutter/social_app/modules/login/cubit/social_login_states.dart';
 import 'package:udemy_flutter/social_app/modules/register/social_register_screen.dart';
 import 'package:udemy_flutter/social_app/shared/components/components.dart';
+import 'package:udemy_flutter/social_app/shared/network/local/social_cache_helper.dart';
+import 'package:udemy_flutter/social_app/shared/styles/colors.dart';
 
 class SocialLoginScreen extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
@@ -23,6 +27,22 @@ class SocialLoginScreen extends StatelessWidget {
                 backgroundColor: Colors.red,
               ),
             );
+          } else if (state is SocialLoginSuccessState) {
+            SocialCacheHelper.saveData(
+              key: 'uid',
+              value: FirebaseAuth.instance.currentUser.uid,
+            ).then((value) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Logged in successfully'),
+                  backgroundColor: defaultColor,
+                ),
+              );
+              navigateToReplacement(
+                context,
+                SocialLayout(),
+              );
+            });
           }
         },
         builder: (context, state) {

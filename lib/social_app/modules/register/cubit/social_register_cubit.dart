@@ -41,6 +41,7 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
           email: value.user.email,
           phone: phone,
           name: name,
+          isEmailVerified: false,
         ),
       );
       if (state is SocialCreateUserSuccessState) {
