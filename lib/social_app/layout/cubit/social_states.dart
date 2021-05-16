@@ -21,3 +21,5 @@ class SocialGetUserErrorState extends SocialErrorState {
 
   SocialGetUserErrorState(this.error) : super(error);
 }
+
+class SocialNewPostState extends SocialStates {}

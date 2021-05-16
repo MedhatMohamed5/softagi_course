@@ -4,28 +4,59 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:udemy_flutter/social_app/layout/cubit/social_cubit.dart';
 import 'package:udemy_flutter/social_app/layout/cubit/social_states.dart';
+import 'package:udemy_flutter/social_app/modules/new_post/new_post_screen.dart';
+import 'package:udemy_flutter/social_app/shared/components/components.dart';
 import 'package:udemy_flutter/social_app/shared/styles/colors.dart';
+import 'package:udemy_flutter/social_app/shared/styles/icon_broken.dart';
 
 class SocialLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SocialCubit, SocialStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is SocialNewPostState) {
+          navigateTo(context, NewPostScreen());
+        }
+      },
       builder: (context, state) {
         var socialCubit = SocialCubit.get(context);
         return Scaffold(
           appBar: AppBar(
-            title: Text('News Feed'),
+            title: Text(socialCubit.appBarTitles[socialCubit.currentIndex < 2
+                ? socialCubit.currentIndex
+                : socialCubit.currentIndex - 1]),
+            actions: [
+              IconButton(
+                icon: Icon(IconBroken.Notification),
+                tooltip: 'Notifications',
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: Icon(IconBroken.Search),
+                tooltip: 'Search',
+                onPressed: () {},
+              ),
+            ],
           ),
           body: ConditionalBuilder(
             condition: socialCubit.model != null,
             builder: (context) {
-              return Column(
+              return socialCubit.screens[socialCubit.currentIndex < 2
+                  ? socialCubit.currentIndex
+                  : socialCubit.currentIndex - 1];
+              /*Column(
                 children: [
-                  _verificationWidget(),
+                  // _verificationWidget(),
                 ],
-              );
+              );*/
             },
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            onTap: (index) {
+              socialCubit.changeBottomNav(index);
+            },
+            items: socialCubit.bottomNavItems,
+            currentIndex: socialCubit.currentIndex,
           ),
         );
       },

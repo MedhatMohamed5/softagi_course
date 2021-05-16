@@ -5,7 +5,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'colors.dart';
 
 ThemeData darkTheme(BuildContext context) => ThemeData(
-      fontFamily: 'Cairo',
+      fontFamily: 'Jannah',
       brightness: Brightness.dark,
       appBarTheme: AppBarTheme(
         iconTheme: IconThemeData(color: Colors.white),
@@ -17,6 +17,7 @@ ThemeData darkTheme(BuildContext context) => ThemeData(
         backgroundColor: HexColor('333739'),
         elevation: 0,
         titleTextStyle: TextStyle(
+          fontFamily: 'Jannah',
           color: Colors.white,
           fontSize: 20,
           fontWeight: FontWeight.bold,
@@ -46,15 +47,15 @@ ThemeData darkTheme(BuildContext context) => ThemeData(
       ),
       textTheme: TextTheme(
         subtitle1: Theme.of(context).textTheme.subtitle1.copyWith(
-              fontFamily: 'Cairo',
+              fontFamily: 'Jannah',
               color: Colors.white,
             ),
         bodyText2: Theme.of(context).textTheme.bodyText2.copyWith(
-              fontFamily: 'Cairo',
+              fontFamily: 'Jannah',
               color: Colors.white,
             ),
         bodyText1: TextStyle(
-          fontFamily: 'Cairo',
+          fontFamily: 'Jannah',
           color: Colors.white,
           fontSize: 18,
           fontWeight: FontWeight.w600,
@@ -64,7 +65,7 @@ ThemeData darkTheme(BuildContext context) => ThemeData(
 
 ThemeData lightTheme(BuildContext context) => ThemeData(
       brightness: Brightness.light,
-      fontFamily: 'Cairo',
+      fontFamily: 'Jannah',
       appBarTheme: AppBarTheme(
         iconTheme: IconThemeData(color: Colors.black),
         backwardsCompatibility: false,
@@ -76,6 +77,7 @@ ThemeData lightTheme(BuildContext context) => ThemeData(
         elevation: 0,
         titleTextStyle: TextStyle(
           color: Colors.black,
+          fontFamily: 'Jannah',
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
@@ -85,14 +87,14 @@ ThemeData lightTheme(BuildContext context) => ThemeData(
       textTheme: TextTheme(
         subtitle1: Theme.of(context).textTheme.subtitle1.copyWith(
               color: Colors.black,
-              fontFamily: 'Cairo',
+              fontFamily: 'Jannah',
             ),
         bodyText2: Theme.of(context).textTheme.bodyText2.copyWith(
-              fontFamily: 'Cairo',
+              fontFamily: 'Jannah',
               color: Colors.black,
             ),
         bodyText1: TextStyle(
-          fontFamily: 'Cairo',
+          fontFamily: 'Jannah',
           color: Colors.black,
           fontSize: 18,
           fontWeight: FontWeight.w600,

@@ -66,6 +66,14 @@ flutter:
         - asset: assets/fonts/Cairo/Cairo-Regular.ttf
         - asset: assets/fonts/Cairo/Cairo-Bold.ttf
           weight: 700
+    - family: Jannah
+      fonts:
+        - asset: assets/fonts/jannah.ttf
+          weight: 700
+    - family: Icons
+      fonts:
+        - asset: assets/fonts/icons.ttf
+          weight: 700
 
   # To add assets to your application, add an assets section, like this:
 
