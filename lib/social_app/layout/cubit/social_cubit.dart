@@ -307,6 +307,10 @@ class SocialCubit extends Cubit<SocialStates> {
 
           print("Get Post User -- $userData");
           print("Get Post Post -- $post");
+
+          var likesList =
+              (await element.reference.collection('likes').get()).docs;
+
           var existedPosts = posts.where((eleme) => eleme.uid == element.id);
           if (existedPosts.isEmpty) {
             posts.add(
@@ -317,11 +321,13 @@ class SocialCubit extends Cubit<SocialStates> {
                 userImage: userData['image'] ?? '',
                 userName: userData['name'] ?? '',
                 dateTime: post['dateTime'] ?? '',
+                postLikes: likesList.length,
               ),
             );
           } else {
             var existed = existedPosts.first;
             existed.userImage = userData['image'] ?? '';
+            existed.postLikes = likesList.length;
           }
           emit(SocialGetPostsSuccessState());
         });
@@ -332,34 +338,19 @@ class SocialCubit extends Cubit<SocialStates> {
     } catch (err) {
       SocialGetPostsErrorState(err.toString());
     }
-/*
-    await FirebaseFirestore.instance.collection('posts').get().then((value) {
-      value.docs.forEach(
-        (element) async {
-          var post = element.data();
-          var userData = (await FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(post['userId'])
-                  .get())
-              .data();
+  }
 
-          print("Get Post User -- $userData");
-          print("Get Post Post -- $post");
-          posts.add(
-            PostViewModel(
-              uid: element.id,
-              postImage: post['postImage'] ?? '',
-              text: post['text'] ?? '',
-              userImage: userData['image'] ?? '',
-              userName: userData['name'] ?? '',
-              dateTime: post['dateTime'] ?? '',
-            ),
-          );
-        },
-      );
-      emit(SocialGetPostsSuccessState());
-    }).catchError((err) {
-      SocialGetPostsErrorState(err.toString());
-    });*/
+  Future<void> likePost({@required String postId}) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(postId)
+          .collection('likes')
+          .doc(userModel.uid)
+          .set({'like': true});
+      emit(SocialPostLikeSuccessState());
+    } catch (err) {
+      emit(SocialPostLikeErrorState(err.toString()));
+    }
   }
 }

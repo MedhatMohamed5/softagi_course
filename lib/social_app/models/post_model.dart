@@ -38,6 +38,7 @@ class PostViewModel {
   String dateTime;
   String text;
   String postImage;
+  int postLikes;
 
   PostViewModel({
     this.uid,
@@ -46,6 +47,7 @@ class PostViewModel {
     this.text,
     this.dateTime,
     this.postImage,
+    this.postLikes,
   });
 
   PostViewModel.fromJson(String uid, Map<String, dynamic> json) {
@@ -55,6 +57,7 @@ class PostViewModel {
     this.text = json['text'] ?? '';
     this.dateTime = json['dateTime'] ?? '';
     this.postImage = json['postImage'] ?? '';
+    this.postLikes = json['postLikes'] ?? 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -64,6 +67,7 @@ class PostViewModel {
     data['text'] = this.text;
     data['dateTime'] = this.dateTime;
     data['postImage'] = this.postImage;
+    data['postLikes'] = this.postLikes;
     return data;
   }
 }

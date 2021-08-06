@@ -95,9 +95,10 @@ class FeedsScreen extends StatelessWidget {
                 CircleAvatar(
                   radius: 25,
                   backgroundImage: NetworkImage(
-                      postViewModel.userImage ??
-                          'https://image.freepik.com/free-photo/photo-unsure-doubtful-young-woman-holds-chin-looks-right-doubtfully-feels-hesitant_273609-18353.jpg',
-                      scale: .3),
+                    postViewModel.userImage ??
+                        'https://image.freepik.com/free-photo/photo-unsure-doubtful-young-woman-holds-chin-looks-right-doubtfully-feels-hesitant_273609-18353.jpg',
+                    scale: .3,
+                  ),
                 ),
                 SizedBox(width: 12),
                 Expanded(
@@ -248,7 +249,7 @@ class FeedsScreen extends StatelessWidget {
                           width: 3,
                         ),
                         Text(
-                          '0',
+                          '${postViewModel.postLikes}',
                           style: Theme.of(context).textTheme.caption,
                         ),
                       ],
@@ -324,7 +325,10 @@ class FeedsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          SocialCubit.get(context)
+                              .likePost(postId: postViewModel.uid);
+                        },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(

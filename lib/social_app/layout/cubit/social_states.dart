@@ -73,3 +73,11 @@ class SocialUpdateUserErrorState extends SocialErrorState {
 
   SocialUpdateUserErrorState(this.error) : super(error);
 }
+
+class SocialPostLikeSuccessState extends SocialStates {}
+
+class SocialPostLikeErrorState extends SocialErrorState {
+  final String error;
+
+  SocialPostLikeErrorState(this.error) : super(error);
+}
