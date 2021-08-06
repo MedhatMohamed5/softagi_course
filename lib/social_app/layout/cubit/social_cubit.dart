@@ -5,7 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:udemy_flutter/social_app/layout/cubit/new_post_states.dart';
 import 'package:udemy_flutter/social_app/layout/cubit/social_states.dart';
+import 'package:udemy_flutter/social_app/models/post_model.dart';
 import 'package:udemy_flutter/social_app/models/social_user_model.dart';
 import 'package:udemy_flutter/social_app/modules/chat/chats_screen.dart';
 import 'package:udemy_flutter/social_app/modules/feeds/feeds_screen.dart';
@@ -137,6 +139,7 @@ class SocialCubit extends Cubit<SocialStates> {
           profileImageUrl = downloadUrl;
           print("Mine $profileImageUrl");
           emit(SocialProfileImageUploadSuccessState());
+          emit(CreatePostLodingState());
         } else {
           emit(SocialProfileImageUploadErrorState(
               'Error wihle uploading profile image'));
@@ -145,22 +148,6 @@ class SocialCubit extends Cubit<SocialStates> {
         emit(SocialProfileImageUploadErrorState(err.toString()));
       }
     }
-    /*await fireStorage.FirebaseStorage.instance
-        .ref()
-        .child('users/${Uri.file(profileImage.path).pathSegments.last}')
-        .putFile(profileImage)
-        .then((val) {
-      val.ref.getDownloadURL().then((value) {
-        print(value);
-        profileImageUrl = value;
-        print("Mine $profileImageUrl");
-        emit(SocialProfileImageUploadSuccessState());
-      }).catchError((err) {
-        emit(SocialProfileImageUploadErrorState(err.toString()));
-      });
-    }).catchError((err) {
-      emit(SocialProfileImageUploadErrorState(err.toString()));
-    });*/
   }
 
   Future<void> uploadCoverImage() async {
@@ -176,6 +163,7 @@ class SocialCubit extends Cubit<SocialStates> {
           coverImageUrl = downloadUrl;
           print("Mine $coverImageUrl");
           emit(SocialCoverImageUploadSuccessState());
+          emit(CreatePostLodingState());
         } else {
           emit(SocialCoverImageUploadErrorState(
               'Error wihle uploading cover image'));
@@ -184,24 +172,6 @@ class SocialCubit extends Cubit<SocialStates> {
         emit(SocialCoverImageUploadErrorState(err.toString()));
       }
     }
-/*
-    await fireStorage.FirebaseStorage.instance
-        .ref()
-        .child('users/${Uri.file(coverImage.path).pathSegments.last}')
-        .putFile(coverImage)
-        .then((val) {
-      val.ref.getDownloadURL().then((value) {
-        print(value);
-        coverImageUrl = value;
-        print("Mine $coverImageUrl");
-        emit(SocialCoverImageUploadSuccessState());
-      }).catchError((err) {
-        emit(SocialCoverImageUploadErrorState(err.toString()));
-      });
-    }).catchError((err) {
-      emit(SocialCoverImageUploadErrorState(err.toString()));
-    });
-    */
   }
 
   Future<void> updateUser({
@@ -216,6 +186,7 @@ class SocialCubit extends Cubit<SocialStates> {
   }
 
   Future<void> updateProfile(String phone, String bio, String name) async {
+    emit(CreatePostLodingState());
     SocialUserModel model;
 
     print("Mine  In update $coverImageUrl");
@@ -253,5 +224,69 @@ class SocialCubit extends Cubit<SocialStates> {
     coverImage = null;
     profileImageUrl = '';
     coverImageUrl = '';
+  }
+
+  Future<void> createNewPost({@required PostModel post}) async {
+    emit(CreatePostLodingState());
+    await uploadPostImage();
+
+    post.postImage = postImageUrl;
+    print("Post --- ${post.toJson().toString()}");
+
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .add(post.toJson())
+        .then((value) {
+      postImage = null;
+      postImageUrl = '';
+      emit(CreatePostSuccessState());
+    }).catchError((error) {
+      print(error.toString());
+      emit(CreatePostErrorState(error.toString()));
+    });
+  }
+
+  File postImage;
+  String postImageUrl = '';
+
+  Future getPostImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      postImage = File(pickedFile.path);
+      print(postImage.path);
+      emit(SocialpostImageSuccessState());
+    } else {
+      print('No Image Selected');
+      emit(SocialPostImageErrorState('No Image Selected'));
+    }
+  }
+
+  void removePostImage() {
+    postImage = null;
+    postImageUrl = '';
+    emit(SocialpostImageRemoveState());
+  }
+
+  Future<void> uploadPostImage() async {
+    if (postImage != null) {
+      var ref = fireStorage.FirebaseStorage.instance
+          .ref()
+          .child('posts/${Uri.file(postImage.path).pathSegments.last}');
+      try {
+        await ref.putFile(postImage);
+        String downloadUrl = await ref.getDownloadURL();
+        if (downloadUrl.isNotEmpty) {
+          postImageUrl = downloadUrl;
+          print("Mine $postImageUrl");
+          emit(SocialpostImageUploadSuccessState());
+          emit(CreatePostLodingState());
+        } else {
+          emit(SocialPostImageUploadErrorState(
+              'Error wihle uploading profile image'));
+        }
+      } catch (err) {
+        emit(SocialPostImageUploadErrorState(err.toString()));
+      }
+    }
   }
 }

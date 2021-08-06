@@ -22,8 +22,6 @@ class SocialGetUserErrorState extends SocialErrorState {
   SocialGetUserErrorState(this.error) : super(error);
 }
 
-class SocialNewPostState extends SocialStates {}
-
 class SocialProfileImageSuccessState extends SocialStates {}
 
 class SocialProfileImageErrorState extends SocialErrorState {

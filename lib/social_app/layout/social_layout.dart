@@ -2,6 +2,7 @@ import 'package:conditional_builder/conditional_builder.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:udemy_flutter/social_app/layout/cubit/new_post_states.dart';
 import 'package:udemy_flutter/social_app/layout/cubit/social_cubit.dart';
 import 'package:udemy_flutter/social_app/layout/cubit/social_states.dart';
 import 'package:udemy_flutter/social_app/modules/new_post/new_post_screen.dart';
