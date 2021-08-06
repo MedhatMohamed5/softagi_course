@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:udemy_flutter/social_app/shared/styles/colors.dart';
+import 'package:udemy_flutter/social_app/shared/styles/icon_broken.dart';
 
 void navigateTo(
   BuildContext context,
@@ -107,4 +108,23 @@ Future<bool> showToast({
       backgroundColor: backgroundColor,
       textColor: Colors.white,
       fontSize: 16.0,
+    );
+
+Widget defaultAppBar({
+  @required BuildContext context,
+  String title,
+  List<Widget> actions = const [],
+}) =>
+    AppBar(
+      leading: IconButton(
+        icon: Icon(IconBroken.Arrow___Left_2),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+      title: Text(
+        title,
+        overflow: TextOverflow.ellipsis,
+      ),
+      actions: actions,
     );

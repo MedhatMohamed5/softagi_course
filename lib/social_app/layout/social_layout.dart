@@ -39,7 +39,7 @@ class SocialLayout extends StatelessWidget {
             ],
           ),
           body: ConditionalBuilder(
-            condition: socialCubit.model != null,
+            condition: socialCubit.userModel != null,
             builder: (context) {
               return socialCubit.screens[socialCubit.currentIndex < 2
                   ? socialCubit.currentIndex
@@ -63,7 +63,7 @@ class SocialLayout extends StatelessWidget {
     );
   }
 
-  Widget _verificationWidget() {
+  /*Widget _verificationWidget() {
     return ConditionalBuilder(
       condition: !FirebaseAuth.instance.currentUser.emailVerified,
       builder: (context) => Container(
@@ -92,7 +92,7 @@ class SocialLayout extends StatelessWidget {
         ),
       ),
     );
-  }
+  }*/
 
   void sendVerification(BuildContext context) {
     FirebaseAuth.instance.currentUser.sendEmailVerification().then((value) {

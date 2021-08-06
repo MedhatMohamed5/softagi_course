@@ -30,13 +30,15 @@ import 'package:udemy_flutter/social_app/modules/login/social_login_screen.dart'
 import 'package:udemy_flutter/social_app/shared/network/local/social_cache_helper.dart';
 import 'package:udemy_flutter/social_app/shared/styles/themes.dart';
 
+import 'shared/network/local/cache_helper.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
   Bloc.observer = MyBlocObserver();
   // DioHelper.init();
-  // await CacheHelper.init();
+  await CacheHelper.init();
 
   ShopDioHelper.init();
   await ShopCacheHelper.init();

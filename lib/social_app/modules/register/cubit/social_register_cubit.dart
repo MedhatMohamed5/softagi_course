@@ -42,6 +42,11 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
           phone: phone,
           name: name,
           isEmailVerified: false,
+          bio: '',
+          coverImage:
+              'https://image.freepik.com/free-photo/crazy-overjoyed-woman-makes-rock-n-roll-gesture-wears-transparent-glasses-striped-sweater-models-against-white-wall-smiling-female-rocker-gestures-indoor-alone-horn-gesture-concept_273609-28882.jpg',
+          image:
+              'https://image.freepik.com/free-photo/crazy-overjoyed-woman-makes-rock-n-roll-gesture-wears-transparent-glasses-striped-sweater-models-against-white-wall-smiling-female-rocker-gestures-indoor-alone-horn-gesture-concept_273609-28882.jpg',
         ),
       );
       if (state is SocialCreateUserSuccessState) {
