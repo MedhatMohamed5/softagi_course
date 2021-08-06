@@ -289,4 +289,77 @@ class SocialCubit extends Cubit<SocialStates> {
       }
     }
   }
+
+  List<PostViewModel> posts = [];
+  Future<void> getPosts() async {
+    emit(SocialGetPostsLoadingState());
+    try {
+      var postsDocs =
+          (await FirebaseFirestore.instance.collection('posts').get()).docs;
+      if (postsDocs.isNotEmpty) {
+        postsDocs.forEach((element) async {
+          var post = element.data();
+          var userData = (await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(post['userId'])
+                  .get())
+              .data();
+
+          print("Get Post User -- $userData");
+          print("Get Post Post -- $post");
+          var existedPosts = posts.where((eleme) => eleme.uid == element.id);
+          if (existedPosts.isEmpty) {
+            posts.add(
+              PostViewModel(
+                uid: element.id,
+                postImage: post['postImage'] ?? '',
+                text: post['text'] ?? '',
+                userImage: userData['image'] ?? '',
+                userName: userData['name'] ?? '',
+                dateTime: post['dateTime'] ?? '',
+              ),
+            );
+          } else {
+            var existed = existedPosts.first;
+            existed.userImage = userData['image'] ?? '';
+          }
+          emit(SocialGetPostsSuccessState());
+        });
+        emit(SocialGetPostsSuccessState());
+      } else {
+        SocialGetPostsErrorState("there is no posts");
+      }
+    } catch (err) {
+      SocialGetPostsErrorState(err.toString());
+    }
+/*
+    await FirebaseFirestore.instance.collection('posts').get().then((value) {
+      value.docs.forEach(
+        (element) async {
+          var post = element.data();
+          var userData = (await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(post['userId'])
+                  .get())
+              .data();
+
+          print("Get Post User -- $userData");
+          print("Get Post Post -- $post");
+          posts.add(
+            PostViewModel(
+              uid: element.id,
+              postImage: post['postImage'] ?? '',
+              text: post['text'] ?? '',
+              userImage: userData['image'] ?? '',
+              userName: userData['name'] ?? '',
+              dateTime: post['dateTime'] ?? '',
+            ),
+          );
+        },
+      );
+      emit(SocialGetPostsSuccessState());
+    }).catchError((err) {
+      SocialGetPostsErrorState(err.toString());
+    });*/
+  }
 }

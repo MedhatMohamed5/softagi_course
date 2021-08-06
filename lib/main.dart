@@ -90,7 +90,9 @@ class MyApp extends StatelessWidget {
               AppCubit()..changeAppMode(fromShared: this.isDark),
         ),
         BlocProvider(
-          create: (BuildContext context) => SocialCubit()..getUserData(),
+          create: (BuildContext context) => SocialCubit()
+            ..getUserData()
+            ..getPosts(),
         ),
         /*BlocProvider(
           create: (context) => ShopCubit()

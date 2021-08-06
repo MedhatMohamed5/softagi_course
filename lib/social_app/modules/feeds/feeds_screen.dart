@@ -1,57 +1,86 @@
+import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:udemy_flutter/social_app/layout/cubit/social_cubit.dart';
+import 'package:udemy_flutter/social_app/layout/cubit/social_states.dart';
+import 'package:udemy_flutter/social_app/models/post_model.dart';
 import 'package:udemy_flutter/social_app/shared/styles/colors.dart';
 import 'package:udemy_flutter/social_app/shared/styles/icon_broken.dart';
 
 class FeedsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Column(
-        children: [
-          Card(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            elevation: 10,
-            margin: const EdgeInsets.all(8),
-            child: Stack(
-              alignment: AlignmentDirectional.bottomEnd,
-              children: [
-                Image(
-                  fit: BoxFit.cover,
-                  height: 200,
-                  width: double.infinity,
-                  image: NetworkImage(
-                    'https://image.freepik.com/free-photo/shot-unrecognizable-man-demonstrates-victroy-sign-through-torn-hole-yellow-paper_273609-25539.jpg',
-                  ),
+    return BlocConsumer<SocialCubit, SocialStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        final socialCubit = SocialCubit.get(context);
+        return ConditionalBuilder(
+          condition: !(state is SocialGetPostsLoadingState) &&
+              socialCubit.posts.isNotEmpty,
+          builder: (context) {
+            return RefreshIndicator(
+              onRefresh: socialCubit.getPosts,
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    Card(
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      elevation: 10,
+                      margin: const EdgeInsets.all(8),
+                      child: Stack(
+                        alignment: AlignmentDirectional.bottomEnd,
+                        children: [
+                          Image(
+                            fit: BoxFit.cover,
+                            height: 200,
+                            width: double.infinity,
+                            image: NetworkImage(
+                              'https://image.freepik.com/free-photo/shot-unrecognizable-man-demonstrates-victroy-sign-through-torn-hole-yellow-paper_273609-25539.jpg',
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Communicate with your friends',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1
+                                  .copyWith(
+                                    color: Colors.white,
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) =>
+                          buildPostItem(context, socialCubit.posts[index]),
+                      separatorBuilder: (context, index) => SizedBox(
+                        height: 8,
+                      ),
+                      itemCount: socialCubit.posts.length,
+                    ),
+                    SizedBox(height: 10),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Communicate with your friends',
-                    style: Theme.of(context).textTheme.subtitle1.copyWith(
-                          color: Colors.white,
-                        ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => buildPostItem(context),
-            separatorBuilder: (context, index) => SizedBox(
-              height: 8,
-            ),
-            itemCount: 10,
-          ),
-          SizedBox(height: 10),
-        ],
-      ),
+              ),
+            );
+          },
+          fallback: (context) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        );
+      },
     );
   }
 
-  Widget buildPostItem(BuildContext context) {
+  Widget buildPostItem(BuildContext context, PostViewModel postViewModel) {
     return Card(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 5,
@@ -59,14 +88,16 @@ class FeedsScreen extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 CircleAvatar(
                   radius: 25,
                   backgroundImage: NetworkImage(
-                    'https://image.freepik.com/free-photo/photo-unsure-doubtful-young-woman-holds-chin-looks-right-doubtfully-feels-hesitant_273609-18353.jpg',
-                  ),
+                      postViewModel.userImage ??
+                          'https://image.freepik.com/free-photo/photo-unsure-doubtful-young-woman-holds-chin-looks-right-doubtfully-feels-hesitant_273609-18353.jpg',
+                      scale: .3),
                 ),
                 SizedBox(width: 12),
                 Expanded(
@@ -77,7 +108,7 @@ class FeedsScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Medhat Mohamed',
+                            postViewModel.userName ?? '',
                           ),
                           SizedBox(
                             width: 4,
@@ -90,7 +121,8 @@ class FeedsScreen extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        '15/5/2021 10:45 PM',
+                        postViewModel.dateTime ??
+                            DateTime.now().toIso8601String(),
                         style: Theme.of(context)
                             .textTheme
                             .caption
@@ -118,16 +150,17 @@ class FeedsScreen extends StatelessWidget {
               ),
             ),
             Text(
-              'Lorem Ipsum is simply dummy text of the printing ' +
-                  'and typesetting industry. Lorem Ipsum has been the ' +
-                  'industry\'s standard dummy text ever since the 1500s, ' +
-                  'when an unknown printer took a galley of type and ' +
-                  'scrambled it to make a type specimen book.',
+              postViewModel.text ??
+                  'Lorem Ipsum is simply dummy text of the printing ' +
+                      'and typesetting industry. Lorem Ipsum has been the ' +
+                      'industry\'s standard dummy text ever since the 1500s, ' +
+                      'when an unknown printer took a galley of type and ' +
+                      'scrambled it to make a type specimen book.',
               style: Theme.of(context).textTheme.subtitle1.copyWith(
                     height: 1.2,
                   ),
             ),
-            Padding(
+            /*Padding(
               padding: const EdgeInsets.only(
                 bottom: 8,
               ),
@@ -181,19 +214,19 @@ class FeedsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              height: 160,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                    'https://image.freepik.com/free-photo/photo-unsure-doubtful-young-woman-holds-chin-looks-right-doubtfully-feels-hesitant_273609-18353.jpg',
+            */
+            if (postViewModel.postImage.isNotEmpty)
+              Container(
+                height: 160,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(postViewModel.postImage, scale: .7),
                   ),
                 ),
               ),
-            ),
             SizedBox(
               height: 6,
             ),
@@ -215,7 +248,7 @@ class FeedsScreen extends StatelessWidget {
                           width: 3,
                         ),
                         Text(
-                          '1200',
+                          '0',
                           style: Theme.of(context).textTheme.caption,
                         ),
                       ],
@@ -237,7 +270,7 @@ class FeedsScreen extends StatelessWidget {
                           width: 3,
                         ),
                         Text(
-                          '120 comments',
+                          '0 comments',
                           style: Theme.of(context).textTheme.caption,
                         ),
                       ],
@@ -262,7 +295,7 @@ class FeedsScreen extends StatelessWidget {
                       CircleAvatar(
                         radius: 15,
                         backgroundImage: NetworkImage(
-                          'https://image.freepik.com/free-photo/photo-unsure-doubtful-young-woman-holds-chin-looks-right-doubtfully-feels-hesitant_273609-18353.jpg',
+                          SocialCubit.get(context).userModel.image,
                         ),
                       ),
                       SizedBox(width: 12),
