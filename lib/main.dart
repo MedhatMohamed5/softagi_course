@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,14 +28,43 @@ import 'package:udemy_flutter/social_app/layout/social_layout.dart';
 // import 'package:udemy_flutter/modules/users/users_screen.dart';
 // import 'package:udemy_flutter/shop_app/layout/shop_layout.dart';
 import 'package:udemy_flutter/social_app/modules/login/social_login_screen.dart';
+import 'package:udemy_flutter/social_app/shared/components/components.dart';
 import 'package:udemy_flutter/social_app/shared/network/local/social_cache_helper.dart';
 import 'package:udemy_flutter/social_app/shared/styles/themes.dart';
 
 import 'shared/network/local/cache_helper.dart';
 
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  showToast(
+    message: message.data.toString(),
+    backgroundColor: Colors.greenAccent,
+  );
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  var token = await FirebaseMessaging.instance.getToken();
+  print("Message Token $token");
+
+  FirebaseMessaging.onMessage.listen((event) {
+    print(event.data.toString());
+    showToast(
+      message: event.data.toString(),
+      backgroundColor: Colors.greenAccent,
+    );
+  });
+  FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    print(event.data.toString());
+    showToast(
+      message: event.data.toString(),
+      backgroundColor: Colors.greenAccent,
+    );
+  });
+
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   Bloc.observer = MyBlocObserver();
   // DioHelper.init();
@@ -47,7 +77,7 @@ void main() async {
 
   bool isDark = ShopCacheHelper.getData(key: 'isDark');
   // bool onBoarding = ShopCacheHelper.getData(key: 'onBoarding');
-  String token = ShopCacheHelper.getData(key: 'token');
+  //String token = ShopCacheHelper.getData(key: 'token');
 
   String uid = SocialCacheHelper.getData(key: 'uid');
   print(token);
