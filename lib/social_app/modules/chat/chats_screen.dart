@@ -1,9 +1,11 @@
 import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:udemy_flutter/shop_app/shared/components/components.dart';
 import 'package:udemy_flutter/social_app/layout/cubit/social_cubit.dart';
 import 'package:udemy_flutter/social_app/layout/cubit/social_states.dart';
 import 'package:udemy_flutter/social_app/models/social_user_model.dart';
+import 'package:udemy_flutter/social_app/modules/chat/chat_details/chat_details_screen.dart';
 
 class ChatssScreen extends StatelessWidget {
   @override
@@ -17,7 +19,7 @@ class ChatssScreen extends StatelessWidget {
           builder: (context) => ListView.separated(
             physics: BouncingScrollPhysics(),
             itemBuilder: (context, index) =>
-                buildChatItem(socialCubit.users[index]),
+                buildChatItem(context, socialCubit.users[index]),
             separatorBuilder: (context, index) => Divider(
               height: 0,
             ),
@@ -31,8 +33,15 @@ class ChatssScreen extends StatelessWidget {
     );
   }
 
-  Widget buildChatItem(SocialUserModel user) => InkWell(
-        onTap: () {},
+  Widget buildChatItem(BuildContext context, SocialUserModel user) => InkWell(
+        onTap: () {
+          navigateTo(
+            context,
+            ChatDetailsScreen(
+              userModel: user,
+            ),
+          );
+        },
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(

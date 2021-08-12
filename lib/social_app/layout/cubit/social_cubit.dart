@@ -5,8 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:udemy_flutter/social_app/layout/cubit/chats_states.dart';
 import 'package:udemy_flutter/social_app/layout/cubit/new_post_states.dart';
 import 'package:udemy_flutter/social_app/layout/cubit/social_states.dart';
+import 'package:udemy_flutter/social_app/models/chat_message_model.dart';
 import 'package:udemy_flutter/social_app/models/post_model.dart';
 import 'package:udemy_flutter/social_app/models/social_user_model.dart';
 import 'package:udemy_flutter/social_app/modules/chat/chats_screen.dart';
@@ -255,7 +257,7 @@ class SocialCubit extends Cubit<SocialStates> {
     if (pickedFile != null) {
       postImage = File(pickedFile.path);
       print(postImage.path);
-      emit(SocialpostImageSuccessState());
+      emit(SocialPostImageSuccessState());
     } else {
       print('No Image Selected');
       emit(SocialPostImageErrorState('No Image Selected'));
@@ -265,7 +267,7 @@ class SocialCubit extends Cubit<SocialStates> {
   void removePostImage() {
     postImage = null;
     postImageUrl = '';
-    emit(SocialpostImageRemoveState());
+    emit(SocialPostImageRemoveState());
   }
 
   Future<void> uploadPostImage() async {
@@ -279,7 +281,7 @@ class SocialCubit extends Cubit<SocialStates> {
         if (downloadUrl.isNotEmpty) {
           postImageUrl = downloadUrl;
           print("Mine $postImageUrl");
-          emit(SocialpostImageUploadSuccessState());
+          emit(SocialPostImageUploadSuccessState());
           emit(CreatePostLodingState());
         } else {
           emit(SocialPostImageUploadErrorState(
@@ -377,6 +379,52 @@ class SocialCubit extends Cubit<SocialStates> {
       }
     } catch (err) {
       SocialGetAllUsersErrorState(err.toString());
+    }
+  }
+
+  Future<void> sendMessage({
+    @required String recieverId,
+    @required String dateTime,
+    @required String message,
+  }) async {
+    ChatMessageModel model = ChatMessageModel(
+      message: message,
+      dateTime: dateTime,
+      recieverId: recieverId,
+      senderId: userModel.uid,
+    );
+    try {
+      var senderMessageDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userModel.uid)
+          .collection('chats')
+          .doc(recieverId)
+          .collection('messages')
+          .add(model.toJson());
+
+      if (senderMessageDoc.id != null) {
+        emit(SocialSendMessageSuccessState());
+      } else {
+        emit(SocialSendMessageErrorState(
+            '${senderMessageDoc.path} not found / cannot send'));
+      }
+
+      var reciverMessageDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(recieverId)
+          .collection('chats')
+          .doc(userModel.uid)
+          .collection('messages')
+          .add(model.toJson());
+
+      if (reciverMessageDoc.id != null) {
+        emit(SocialSendMessageSuccessState());
+      } else {
+        emit(SocialSendMessageErrorState(
+            '${reciverMessageDoc.path} not found / cannot recieve'));
+      }
+    } catch (error) {
+      emit(SocialSendMessageErrorState(error.toString()));
     }
   }
 }

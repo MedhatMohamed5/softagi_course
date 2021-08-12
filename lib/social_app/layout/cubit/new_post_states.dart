@@ -4,9 +4,9 @@ class SocialNewPostState extends SocialStates {}
 
 class CreatePostLodingState extends SocialStates {}
 
-class SocialpostImageSuccessState extends SocialStates {}
+class SocialPostImageSuccessState extends SocialStates {}
 
-class SocialpostImageRemoveState extends SocialStates {}
+class SocialPostImageRemoveState extends SocialStates {}
 
 class SocialPostImageErrorState extends SocialErrorState {
   final String error;
@@ -14,7 +14,7 @@ class SocialPostImageErrorState extends SocialErrorState {
   SocialPostImageErrorState(this.error) : super(error);
 }
 
-class SocialpostImageUploadSuccessState extends SocialStates {}
+class SocialPostImageUploadSuccessState extends SocialStates {}
 
 class SocialPostImageUploadErrorState extends SocialErrorState {
   final String error;
