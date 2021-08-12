@@ -88,6 +88,7 @@ class SocialCubit extends Cubit<SocialStates> {
   ];
 
   void changeBottomNav(int index) {
+    if (index == 1) getUsers();
     if (index == 2) {
       emit(SocialNewPostState());
     } else {
@@ -351,6 +352,31 @@ class SocialCubit extends Cubit<SocialStates> {
       emit(SocialPostLikeSuccessState());
     } catch (err) {
       emit(SocialPostLikeErrorState(err.toString()));
+    }
+  }
+
+  List<SocialUserModel> users = [];
+  Future<void> getUsers() async {
+    emit(SocialGetAllUsersLoadingState());
+    try {
+      var usersDocs =
+          (await FirebaseFirestore.instance.collection('users').get()).docs;
+      if (usersDocs.isNotEmpty) {
+        usersDocs.forEach((element) async {
+          var user = element.data();
+
+          print("Get All Users -- $user");
+          if (users.where((eleme) => eleme.uid == element.id).isEmpty &&
+              element.id != userModel.uid)
+            users.add(SocialUserModel.fromJson(element.id, user));
+          emit(SocialGetAllUsersSuccessState());
+        });
+        emit(SocialGetAllUsersSuccessState());
+      } else {
+        SocialGetAllUsersErrorState("there is no users");
+      }
+    } catch (err) {
+      SocialGetAllUsersErrorState(err.toString());
     }
   }
 }
