@@ -1,4 +1,4 @@
-// import 'dart:io';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:desktop_window/desktop_window.dart';
@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:responsive_builder/responsive_builder.dart';
-import 'package:udemy_flutter/layout/news_app/news_layout.dart';
+import 'package:udemy_flutter/native_code_screen.dart';
 // import 'package:hexcolor/hexcolor.dart';
 // import 'package:udemy_flutter/layout/news_app/news_layout.dart';
 // import 'package:udemy_flutter/layout/todo_app/home_layout.dart';
@@ -100,10 +100,10 @@ void main() async {
   }*/
   //startWidget = uid != null ? SocialLayout() : SocialLoginScreen();
 
-  startWidget = NewsLayout();
+  // startWidget = NewsLayout();
+  startWidget = NativeCodeScreen();
 
-  // if (Platform.isWindows)
-  DesktopWindow.setMinWindowSize(Size(350, 650));
+  if (Platform.isWindows) DesktopWindow.setMinWindowSize(Size(350, 650));
 
   runApp(MyApp(
     isDark: isDark,
