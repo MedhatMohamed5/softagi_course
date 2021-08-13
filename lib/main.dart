@@ -1,9 +1,13 @@
+// import 'dart:io';
+
 import 'package:bloc/bloc.dart';
+import 'package:desktop_window/desktop_window.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:responsive_builder/responsive_builder.dart';
 import 'package:udemy_flutter/layout/news_app/news_layout.dart';
 // import 'package:hexcolor/hexcolor.dart';
 // import 'package:udemy_flutter/layout/news_app/news_layout.dart';
@@ -98,6 +102,9 @@ void main() async {
 
   startWidget = NewsLayout();
 
+  // if (Platform.isWindows)
+  DesktopWindow.setMinWindowSize(Size(350, 650));
+
   runApp(MyApp(
     isDark: isDark,
     startWidget: startWidget,
@@ -153,11 +160,12 @@ class MyApp extends StatelessWidget {
               textDirection: TextDirection.ltr,
               child: startWidget,
             ),
+
             theme: lightTheme(context),
             darkTheme: darkTheme(context),
             // themeMode: ThemeMode.system,
-            themeMode: ThemeMode.light,
-            //AppCubit.get(context).isDark ? ThemeMode.dark : ThemeMode.light,
+            themeMode: //ThemeMode.light,
+                AppCubit.get(context).isDark ? ThemeMode.dark : ThemeMode.light,
           );
         },
       ),

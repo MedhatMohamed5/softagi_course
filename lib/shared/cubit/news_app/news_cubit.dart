@@ -61,7 +61,7 @@ class NewsCubit extends Cubit<NewsStates> {
   }
 
   List<Map<String, dynamic>> business = [];
-
+  int selectedBusinessIndex = 0;
   void getBusiness() {
     emit(NewsGetBusinessLoadingState());
     if (business.length == 0) {
@@ -83,6 +83,11 @@ class NewsCubit extends Cubit<NewsStates> {
     } else {
       emit(NewsGetBusinessSucessState());
     }
+  }
+
+  void selectBusinessItem(int index) {
+    selectedBusinessIndex = index;
+    emit(NewsChangeBusinssIndexState());
   }
 
   List<Map<String, dynamic>> sports = [];
@@ -155,5 +160,11 @@ class NewsCubit extends Cubit<NewsStates> {
       print(error.toString());
       emit(NewsGetSearchFailureState(error.response.data['message']));
     });
+  }
+
+  bool isDesktop = false;
+  void setIsDesktop(bool val) {
+    isDesktop = val;
+    emit(NewsIsDesktopState());
   }
 }
