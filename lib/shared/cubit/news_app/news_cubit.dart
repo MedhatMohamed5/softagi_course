@@ -73,7 +73,7 @@ class NewsCubit extends Cubit<NewsStates> {
         // printWrapped(value.data['articles'][1]['title']);
         business = (value.data['articles'] as List)
             .map((e) => e as Map<String, dynamic>)
-            ?.toList();
+            .toList();
         // printWrapped(business.toString());
         emit(NewsGetBusinessSucessState());
       }).catchError((error) {
@@ -103,7 +103,7 @@ class NewsCubit extends Cubit<NewsStates> {
         // printWrapped(value.data['articles'][1]['title']);
         sports = (value.data['articles'] as List)
             .map((e) => e as Map<String, dynamic>)
-            ?.toList();
+            .toList();
         // printWrapped(business.toString());
         emit(NewsGetSportsSucessState());
       }).catchError((error) {
@@ -128,7 +128,7 @@ class NewsCubit extends Cubit<NewsStates> {
         // printWrapped(value.data['articles'][1]['title']);
         science = (value.data['articles'] as List)
             .map((e) => e as Map<String, dynamic>)
-            ?.toList();
+            .toList();
         // printWrapped(business.toString());
         emit(NewsGetScienceSucessState());
       }).catchError((error) {
@@ -153,7 +153,7 @@ class NewsCubit extends Cubit<NewsStates> {
       // printWrapped(value.data['articles'][1]['title']);
       search = (value.data['articles'] as List)
           .map((e) => e as Map<String, dynamic>)
-          ?.toList();
+          .toList();
       // printWrapped(business.toString());
       emit(NewsGetSearchSucessState());
     }).catchError((error) {

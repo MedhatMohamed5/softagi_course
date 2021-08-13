@@ -1,15 +1,15 @@
 class ChatMessageModel {
-  String senderId;
-  String recieverId;
-  String dateTime;
-  String message;
-  String uid;
+  late String senderId;
+  late String recieverId;
+  late String dateTime;
+  late String message;
+  String? uid;
 
   ChatMessageModel({
-    this.dateTime,
-    this.message,
-    this.recieverId,
-    this.senderId,
+    required this.dateTime,
+    required this.message,
+    required this.recieverId,
+    required this.senderId,
     this.uid,
   });
 

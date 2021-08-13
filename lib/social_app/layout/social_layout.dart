@@ -40,7 +40,7 @@ class SocialLayout extends StatelessWidget {
             ],
           ),
           body: ConditionalBuilder(
-            condition: socialCubit.userModel != null,
+            condition: socialCubit.userModel?.uid != null,
             builder: (context) {
               return socialCubit.screens[socialCubit.currentIndex < 2
                   ? socialCubit.currentIndex
@@ -96,7 +96,7 @@ class SocialLayout extends StatelessWidget {
   }*/
 
   void sendVerification(BuildContext context) {
-    FirebaseAuth.instance.currentUser.sendEmailVerification().then((value) {
+    FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Check your email'),

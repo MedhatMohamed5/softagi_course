@@ -73,7 +73,7 @@ class ShopUpdateUserErrorState extends ShopErrorState {
 }
 
 class ShopToggleFavoriteSucessState extends ShopStates {
-  final String message;
+  final String? message;
 
   ShopToggleFavoriteSucessState({this.message});
 }

@@ -15,7 +15,7 @@ class SettingsScreen extends StatelessWidget {
       builder: (context, state) {
         var socialCubit = SocialCubit.get(context);
         var userModel = socialCubit.userModel;
-        return _buildContent(context, userModel);
+        return _buildContent(context, userModel!);
       },
     );
   }

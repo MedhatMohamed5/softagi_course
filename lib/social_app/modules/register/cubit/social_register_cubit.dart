@@ -23,10 +23,10 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
   }
 
   void userRegister({
-    @required String email,
-    @required String password,
-    @required String name,
-    @required String phone,
+    required String email,
+    required String password,
+    required String name,
+    required String phone,
   }) {
     emit(SocialRegisterLoadingState());
 
@@ -37,8 +37,8 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
 
       await createUser(
         userModel: SocialUserModel(
-          uid: value.user.uid,
-          email: value.user.email,
+          uid: value.user!.uid,
+          email: value.user!.email!,
           phone: phone,
           name: name,
           isEmailVerified: false,
@@ -63,7 +63,7 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
     });
   }
 
-  Future<void> createUser({@required SocialUserModel userModel}) async {
+  Future<void> createUser({required SocialUserModel userModel}) async {
     emit(SocialCreateUserLoadingState());
 
     await FirebaseFirestore.instance

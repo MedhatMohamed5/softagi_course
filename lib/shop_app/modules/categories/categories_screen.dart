@@ -13,9 +13,9 @@ class CategoriesScreen extends StatelessWidget {
       builder: (context, state) {
         var shopCubit = ShopCubit.get(context);
         return ConditionalBuilder(
-          condition: shopCubit.categoriesModel != null,
+          condition: shopCubit.categoriesModel.data!.data!.length > 0,
           builder: (context) =>
-              _buildCategoriesList(shopCubit.categoriesModel.data.data),
+              _buildCategoriesList(shopCubit.categoriesModel.data!.data!),
           fallback: (context) => Center(
             child: CircularProgressIndicator(),
           ),
@@ -40,8 +40,8 @@ class CategoriesScreen extends StatelessWidget {
   }
 
   Widget categoryItem({
-    @required BuildContext context,
-    @required CategoryModel model,
+    required BuildContext context,
+    required CategoryModel model,
   }) =>
       InkWell(
         onTap: () {},
@@ -50,7 +50,7 @@ class CategoriesScreen extends StatelessWidget {
           child: Row(
             children: [
               Image(
-                image: NetworkImage(model.image),
+                image: NetworkImage(model.image!),
                 width: 100,
                 height: 100,
                 fit: BoxFit.cover,

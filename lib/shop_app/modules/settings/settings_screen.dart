@@ -18,9 +18,9 @@ class SettingsScreen extends StatelessWidget {
       builder: (context, state) {
         var shopCubit = ShopCubit.get(context);
         if (shopCubit.userModel != null) {
-          nameController.text = shopCubit.userModel.data.name;
-          emailController.text = shopCubit.userModel.data.email;
-          phoneController.text = shopCubit.userModel.data.phone;
+          nameController.text = shopCubit.userModel.data!.name!;
+          emailController.text = shopCubit.userModel.data!.email!;
+          phoneController.text = shopCubit.userModel.data!.phone!;
         }
         return _buildContent(
           context: context,
@@ -32,9 +32,9 @@ class SettingsScreen extends StatelessWidget {
   }
 
   Widget _buildContent(
-          {@required BuildContext context,
-          @required ShopLoginModel userModel,
-          @required ShopStates state}) =>
+          {required BuildContext context,
+          required ShopLoginModel userModel,
+          required ShopStates state}) =>
       ConditionalBuilder(
         condition: userModel != null,
         builder: (context) => Padding(
@@ -49,7 +49,7 @@ class SettingsScreen extends StatelessWidget {
                     controller: nameController,
                     type: TextInputType.name,
                     validate: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return 'Name must not be empty';
                       }
                       return null;
@@ -64,7 +64,7 @@ class SettingsScreen extends StatelessWidget {
                     controller: emailController,
                     type: TextInputType.emailAddress,
                     validate: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return 'Email must not be empty';
                       }
                       return null;
@@ -79,7 +79,7 @@ class SettingsScreen extends StatelessWidget {
                     controller: phoneController,
                     type: TextInputType.phone,
                     validate: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return 'Phone must not be empty';
                       }
                       return null;
@@ -102,7 +102,7 @@ class SettingsScreen extends StatelessWidget {
       );
 
   void _updateProfile(BuildContext context) {
-    if (formKey.currentState.validate()) {
+    if (formKey.currentState!.validate()) {
       ShopCubit.get(context).updateUserData({
         'name': nameController.text.trim(),
         'email': emailController.text.trim(),

@@ -45,11 +45,11 @@ ThemeData darkTheme(BuildContext context) => ThemeData(
         type: BottomNavigationBarType.fixed,
       ),
       textTheme: TextTheme(
-        subtitle1: Theme.of(context).textTheme.subtitle1.copyWith(
+        subtitle1: Theme.of(context).textTheme.subtitle1!.copyWith(
               fontFamily: 'Cairo',
               color: Colors.white,
             ),
-        bodyText2: Theme.of(context).textTheme.bodyText2.copyWith(
+        bodyText2: Theme.of(context).textTheme.bodyText2!.copyWith(
               fontFamily: 'Cairo',
               color: Colors.white,
             ),
@@ -83,11 +83,11 @@ ThemeData lightTheme(BuildContext context) => ThemeData(
       scaffoldBackgroundColor: Colors.white,
       primarySwatch: defaultColor,
       textTheme: TextTheme(
-        subtitle1: Theme.of(context).textTheme.subtitle1.copyWith(
+        subtitle1: Theme.of(context).textTheme.subtitle1!.copyWith(
               color: Colors.black,
               fontFamily: 'Cairo',
             ),
-        bodyText2: Theme.of(context).textTheme.bodyText2.copyWith(
+        bodyText2: Theme.of(context).textTheme.bodyText2!.copyWith(
               fontFamily: 'Cairo',
               color: Colors.black,
             ),

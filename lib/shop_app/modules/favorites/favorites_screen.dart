@@ -15,7 +15,7 @@ class FavoritesScreen extends StatelessWidget {
           if (state.message != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.message),
+                content: Text(state.message!),
               ),
             );
           }
@@ -26,7 +26,7 @@ class FavoritesScreen extends StatelessWidget {
         return ConditionalBuilder(
           condition: state is! ShopGetFavoritesLoadingState,
           builder: (context) =>
-              _buildFavoritesList(shopCubit.favoritesModel.data.data),
+              _buildFavoritesList(shopCubit.favoritesModel.data!.data!),
           fallback: (context) => Center(
             child: CircularProgressIndicator(),
           ),
@@ -40,7 +40,7 @@ class FavoritesScreen extends StatelessWidget {
       physics: BouncingScrollPhysics(),
       itemBuilder: (context, index) => buildPrdouctListItem(
         context: context,
-        product: favoritesList[index].product,
+        product: favoritesList[index].product!,
       ),
       itemCount: favoritesList.length,
     );

@@ -31,8 +31,8 @@ Widget defaultButton({
   Color background = defaultColor,
   bool isUpperCase = true,
   double radius = 3.0,
-  @required VoidCallback onPressed,
-  @required String text,
+  required VoidCallback onPressed,
+  required String text,
 }) =>
     Container(
       width: width,
@@ -55,17 +55,17 @@ Widget defaultButton({
     );
 
 Widget defaultFormField({
-  @required TextEditingController controller,
-  @required TextInputType type,
-  ValueChanged<String> onSubmit,
-  ValueChanged<String> onChange,
+  required TextEditingController controller,
+  required TextInputType type,
+  ValueChanged<String>? onSubmit,
+  ValueChanged<String>? onChange,
   bool isPassword = false,
-  @required String Function(String) validate,
-  @required String label,
-  @required IconData prefix,
-  IconData suffix,
-  VoidCallback suffixPressed,
-  VoidCallback onTap,
+  required String? Function(String?) validate,
+  required String label,
+  required IconData prefix,
+  IconData? suffix,
+  VoidCallback? suffixPressed,
+  VoidCallback? onTap,
   bool readOnly = false,
   TextCapitalization textCapitalization = TextCapitalization.sentences,
 }) =>
@@ -96,9 +96,9 @@ Widget defaultFormField({
       ),
     );
 
-Future<bool> showToast({
-  @required String message,
-  @required Color backgroundColor,
+Future<bool?> showToast({
+  required String message,
+  required Color backgroundColor,
 }) =>
     Fluttertoast.showToast(
       msg: message,
@@ -110,9 +110,9 @@ Future<bool> showToast({
       fontSize: 16.0,
     );
 
-Widget defaultAppBar({
-  @required BuildContext context,
-  String title,
+AppBar defaultAppBar({
+  required BuildContext context,
+  String? title,
   List<Widget> actions = const [],
 }) =>
     AppBar(
@@ -123,7 +123,7 @@ Widget defaultAppBar({
         },
       ),
       title: Text(
-        title,
+        title!,
         overflow: TextOverflow.ellipsis,
       ),
       actions: actions,

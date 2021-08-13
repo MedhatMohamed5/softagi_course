@@ -33,7 +33,7 @@ class NewPostScreen extends StatelessWidget {
                       post: PostModel(
                         dateTime: DateTime.now().toString(),
                         text: textController.text.trim(),
-                        userId: socialCubit.userModel.uid,
+                        userId: socialCubit.userModel!.uid!,
                       ),
                     );
                   } else {
@@ -97,7 +97,7 @@ class NewPostScreen extends StatelessWidget {
             ),
             image: DecorationImage(
               fit: BoxFit.cover,
-              image: FileImage(socialCubit.postImage),
+              image: FileImage(socialCubit.postImage!),
             ),
           ),
         ),
@@ -163,7 +163,8 @@ class NewPostScreen extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 25,
-          backgroundImage: NetworkImage(socialCubit.userModel.image, scale: .4),
+          backgroundImage:
+              NetworkImage(socialCubit.userModel!.image, scale: .4),
         ),
         SizedBox(width: 12),
         Expanded(

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewScreen extends StatefulWidget {
-  final String url;
-  final String title;
+  final String? url;
+  final String? title;
 
-  const WebViewScreen({Key key, this.url, this.title}) : super(key: key);
+  const WebViewScreen({Key? key, this.url, this.title}) : super(key: key);
 
   @override
   _WebViewScreenState createState() => _WebViewScreenState();
@@ -23,7 +23,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
             children: [
               Expanded(
                 child: Text(
-                  widget.title,
+                  widget.title!,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),

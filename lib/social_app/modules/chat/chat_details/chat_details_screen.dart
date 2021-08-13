@@ -9,7 +9,7 @@ import 'package:udemy_flutter/social_app/shared/styles/colors.dart';
 import 'package:udemy_flutter/social_app/shared/styles/icon_broken.dart';
 
 class ChatDetailsScreen extends StatelessWidget {
-  ChatDetailsScreen({Key key, this.userModel}) : super(key: key);
+  ChatDetailsScreen({Key? key, required this.userModel}) : super(key: key);
   final SocialUserModel userModel;
 
   final messageContrller = TextEditingController();
@@ -18,7 +18,7 @@ class ChatDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        SocialCubit.get(context).getMessages(recieverId: userModel.uid);
+        SocialCubit.get(context).getMessages(recieverId: userModel.uid!);
 
         return BlocConsumer<SocialCubit, SocialStates>(
           listener: (context, state) {},
@@ -104,7 +104,7 @@ class ChatDetailsScreen extends StatelessWidget {
             onPressed: () async {
               if (messageContrller.text.trim().isNotEmpty) {
                 await socialCubit.sendMessage(
-                  recieverId: userModel.uid,
+                  recieverId: userModel.uid!,
                   dateTime: DateTime.now().toIso8601String(),
                   message: messageContrller.text.trim(),
                 );

@@ -1,8 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ShopCacheHelper {
-  static SharedPreferences _sharedPreferences;
+  static late SharedPreferences _sharedPreferences;
 
   ShopCacheHelper._();
 
@@ -11,18 +10,18 @@ class ShopCacheHelper {
   }
 
   static dynamic getData({
-    @required String key,
+    required String key,
   }) {
     return _sharedPreferences.get(key);
   }
 
-  static Future<bool> removeData({@required key}) async {
+  static Future<bool> removeData({required key}) async {
     return await _sharedPreferences.remove(key);
   }
 
   static Future<bool> saveData({
-    @required String key,
-    @required dynamic value,
+    required String key,
+    required dynamic value,
   }) async {
     if (value is String) return await _sharedPreferences.setString(key, value);
     if (value is int) return await _sharedPreferences.setInt(key, value);

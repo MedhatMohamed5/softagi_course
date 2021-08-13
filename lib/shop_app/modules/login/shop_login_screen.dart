@@ -22,19 +22,19 @@ class ShopLoginScreen extends StatelessWidget {
       child: BlocConsumer<ShopLoginCubit, ShopLoginStates>(
         listener: (context, state) {
           if (state is ShopLoginSuccessState) {
-            if (state.loginModel.status) {
+            if (state.loginModel.status!) {
               print(state.loginModel.message);
-              print(state.loginModel.data.token);
+              print(state.loginModel.data?.token);
 
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(state.loginModel.message),
+                  content: Text(state.loginModel.message!),
                   backgroundColor: defaultColor,
                 ),
               );
               ShopCacheHelper.saveData(
                 key: 'token',
-                value: state.loginModel.data.token,
+                value: state.loginModel.data?.token,
               );
 
               navigateToReplacement(
@@ -45,7 +45,7 @@ class ShopLoginScreen extends StatelessWidget {
               print(state.loginModel.message);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(state.loginModel.message),
+                  content: Text(state.loginModel.message!),
                   backgroundColor: errorColor,
                 ),
               );
@@ -69,14 +69,14 @@ class ShopLoginScreen extends StatelessWidget {
                     children: [
                       Text(
                         'LOGIN',
-                        style: Theme.of(context).textTheme.headline4.copyWith(
+                        style: Theme.of(context).textTheme.headline4!.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
                       ),
                       Text(
                         'Login now to see our hot offers',
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               color: Colors.grey,
                             ),
                       ),
@@ -87,7 +87,7 @@ class ShopLoginScreen extends StatelessWidget {
                         controller: emailController,
                         type: TextInputType.emailAddress,
                         validate: (value) {
-                          if (value.isEmpty) return 'Please enter your email';
+                          if (value!.isEmpty) return 'Please enter your email';
                           return null;
                         },
                         label: 'Email Address',
@@ -100,7 +100,7 @@ class ShopLoginScreen extends StatelessWidget {
                         controller: passwordController,
                         type: TextInputType.visiblePassword,
                         validate: (value) {
-                          if (value.isEmpty)
+                          if (value!.isEmpty)
                             return 'Please enter your password';
                           if (value.length < 6)
                             return 'Password at least 6 characters';
@@ -163,7 +163,7 @@ class ShopLoginScreen extends StatelessWidget {
   }
 
   void _submitForm(BuildContext context) {
-    if (formKey.currentState.validate()) {
+    if (formKey.currentState!.validate()) {
       ShopLoginCubit.get(context).userLogin(
         email: emailController.text,
         password: passwordController.text,

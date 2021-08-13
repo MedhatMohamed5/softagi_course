@@ -1,9 +1,9 @@
 import 'package:udemy_flutter/shop_app/models/home/home_model.dart';
 
 class SearchModel {
-  bool status;
-  Null message;
-  SearchDataModel data;
+  bool? status;
+  String? message;
+  SearchDataModel? data;
 
   SearchModel({
     this.status,
@@ -24,47 +24,47 @@ class SearchModel {
     data['status'] = this.status;
     data['message'] = this.message;
     if (this.data != null) {
-      data['data'] = this.data.toJson();
+      data['data'] = this.data!.toJson();
     }
     return data;
   }
 }
 
 class SearchDataModel {
-  int currentPage;
-  List<ProductModel> data;
-  String firstPageUrl;
-  int from;
-  int lastPage;
-  String lastPageUrl;
-  Null nextPageUrl;
-  String path;
-  int perPage;
-  Null prevPageUrl;
-  int to;
-  int total;
+  int? currentPage;
+  List<ProductModel>? data;
+  String? firstPageUrl;
+  int? from;
+  int? lastPage;
+  String? lastPageUrl;
+  String? nextPageUrl;
+  String? path;
+  int? perPage;
+  String? prevPageUrl;
+  int? to;
+  int? total;
 
-  SearchDataModel({
-    this.currentPage,
-    this.data,
-    this.firstPageUrl,
-    this.from,
-    this.lastPage,
-    this.lastPageUrl,
-    this.nextPageUrl,
-    this.path,
-    this.perPage,
-    this.prevPageUrl,
-    this.to,
-    this.total,
-  });
+  /*SearchDataModel({
+      this.currentPage,
+      this.data,
+      this.firstPageUrl,
+      this.from,
+      this.lastPage,
+      this.lastPageUrl,
+      this.nextPageUrl,
+      this.path,
+      this.perPage,
+      this.prevPageUrl,
+      this.to,
+      this.total,
+  });*/
 
   SearchDataModel.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
     if (json['data'] != null) {
       data = [];
       json['data'].forEach((v) {
-        data.add(new ProductModel.fromJson(v));
+        data?.add(new ProductModel.fromJson(v));
       });
     }
     firstPageUrl = json['first_page_url'];
@@ -83,7 +83,7 @@ class SearchDataModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['current_page'] = this.currentPage;
     if (this.data != null) {
-      data['data'] = this.data.map((v) => v.toJson()).toList();
+      data['data'] = this.data?.map((v) => v.toJson()).toList();
     }
     data['first_page_url'] = this.firstPageUrl;
     data['from'] = this.from;

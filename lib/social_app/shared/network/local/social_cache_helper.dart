@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SocialCacheHelper {
-  static SharedPreferences _sharedPreferences;
+  static late SharedPreferences _sharedPreferences;
 
   SocialCacheHelper._();
 
@@ -11,7 +11,7 @@ class SocialCacheHelper {
   }
 
   static dynamic getData({
-    @required String key,
+    required String key,
   }) {
     return _sharedPreferences.get(key);
   }
@@ -21,8 +21,8 @@ class SocialCacheHelper {
   }
 
   static Future<bool> saveData({
-    @required String key,
-    @required dynamic value,
+    required String key,
+    required dynamic value,
   }) async {
     if (value is String) return await _sharedPreferences.setString(key, value);
     if (value is int) return await _sharedPreferences.setInt(key, value);

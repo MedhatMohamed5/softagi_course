@@ -6,7 +6,7 @@ import 'package:udemy_flutter/shared/cubit/todo_app/app_cubit.dart';
 import 'package:udemy_flutter/shared/cubit/todo_app/app_states.dart';
 
 class NewTasksScreen extends StatelessWidget {
-  const NewTasksScreen({Key key}) : super(key: key);
+  const NewTasksScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(

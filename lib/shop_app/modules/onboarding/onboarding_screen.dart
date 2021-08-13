@@ -6,11 +6,11 @@ import 'package:udemy_flutter/shop_app/shared/network/local/shop_cache_helper.da
 import 'package:udemy_flutter/shop_app/shared/styles/colors.dart';
 
 class BoardingModel {
-  final String image;
-  final String title;
-  final String body;
+  late final String image;
+  late final String title;
+  late final String body;
 
-  BoardingModel({this.image, this.title, this.body});
+  BoardingModel({required this.image, required this.title, required this.body});
 }
 
 class OnboardingScreen extends StatefulWidget {

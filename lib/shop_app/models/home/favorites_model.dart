@@ -1,9 +1,9 @@
 import 'package:udemy_flutter/shop_app/models/home/home_model.dart';
 
 class FavoritesModel {
-  bool status;
-  Null message;
-  FavoritesDataModel data;
+  bool? status;
+  String? message;
+  FavoritesDataModel? data;
 
   FavoritesModel({
     this.status,
@@ -24,25 +24,25 @@ class FavoritesModel {
     data['status'] = this.status;
     data['message'] = this.message;
     if (this.data != null) {
-      data['data'] = this.data.toJson();
+      data['data'] = this.data?.toJson();
     }
     return data;
   }
 }
 
 class FavoritesDataModel {
-  int currentPage;
-  List<FavoriteModel> data;
-  String firstPageUrl;
-  int from;
-  int lastPage;
-  String lastPageUrl;
-  Null nextPageUrl;
-  String path;
-  int perPage;
-  Null prevPageUrl;
-  int to;
-  int total;
+  int? currentPage;
+  List<FavoriteModel>? data;
+  String? firstPageUrl;
+  int? from;
+  int? lastPage;
+  String? lastPageUrl;
+  String? nextPageUrl;
+  String? path;
+  int? perPage;
+  String? prevPageUrl;
+  int? to;
+  int? total;
 
   FavoritesDataModel({
     this.currentPage,
@@ -64,7 +64,7 @@ class FavoritesDataModel {
     if (json['data'] != null) {
       data = [];
       json['data'].forEach((v) {
-        data.add(new FavoriteModel.fromJson(v));
+        data?.add(new FavoriteModel.fromJson(v));
       });
     }
     firstPageUrl = json['first_page_url'];
@@ -83,7 +83,7 @@ class FavoritesDataModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['current_page'] = this.currentPage;
     if (this.data != null) {
-      data['data'] = this.data.map((v) => v.toJson()).toList();
+      data['data'] = this.data?.map((v) => v.toJson()).toList();
     }
     data['first_page_url'] = this.firstPageUrl;
     data['from'] = this.from;
@@ -100,8 +100,8 @@ class FavoritesDataModel {
 }
 
 class FavoriteModel {
-  int id;
-  ProductModel product;
+  int? id;
+  ProductModel? product;
 
   FavoriteModel({
     this.id,
@@ -119,7 +119,7 @@ class FavoriteModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     if (this.product != null) {
-      data['product'] = this.product.toJson();
+      data['product'] = this.product?.toJson();
     }
     return data;
   }

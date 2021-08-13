@@ -22,10 +22,10 @@ class ShopLoginCubit extends Cubit<ShopLoginStates> {
     emit(ShopLoginShowPasswordState());
   }
 
-  ShopLoginModel loginModel;
+  late ShopLoginModel loginModel;
   void userLogin({
-    @required String email,
-    @required String password,
+    required String email,
+    required String password,
   }) {
     emit(ShopLoginLoadingState());
     ShopDioHelper.postData(

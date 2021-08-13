@@ -45,7 +45,7 @@ class FeedsScreen extends StatelessWidget {
                               'Communicate with your friends',
                               style: Theme.of(context)
                                   .textTheme
-                                  .subtitle1
+                                  .subtitle1!
                                   .copyWith(
                                     color: Colors.white,
                                   ),
@@ -95,8 +95,9 @@ class FeedsScreen extends StatelessWidget {
                 CircleAvatar(
                   radius: 25,
                   backgroundImage: NetworkImage(
-                    postViewModel.userImage ??
-                        'https://image.freepik.com/free-photo/photo-unsure-doubtful-young-woman-holds-chin-looks-right-doubtfully-feels-hesitant_273609-18353.jpg',
+                    postViewModel.userImage.isNotEmpty
+                        ? postViewModel.userImage
+                        : 'https://image.freepik.com/free-photo/photo-unsure-doubtful-young-woman-holds-chin-looks-right-doubtfully-feels-hesitant_273609-18353.jpg',
                     scale: .3,
                   ),
                 ),
@@ -109,7 +110,9 @@ class FeedsScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            postViewModel.userName ?? '',
+                            postViewModel.userName.isNotEmpty
+                                ? postViewModel.userName
+                                : '',
                           ),
                           SizedBox(
                             width: 4,
@@ -122,11 +125,12 @@ class FeedsScreen extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        postViewModel.dateTime ??
-                            DateTime.now().toIso8601String(),
+                        postViewModel.dateTime.isNotEmpty
+                            ? postViewModel.dateTime
+                            : DateTime.now().toIso8601String(),
                         style: Theme.of(context)
                             .textTheme
-                            .caption
+                            .caption!
                             .copyWith(height: 1),
                       ),
                     ],
@@ -151,13 +155,14 @@ class FeedsScreen extends StatelessWidget {
               ),
             ),
             Text(
-              postViewModel.text ??
-                  'Lorem Ipsum is simply dummy text of the printing ' +
+              postViewModel.text.isNotEmpty
+                  ? postViewModel.text
+                  : 'Lorem Ipsum is simply dummy text of the printing ' +
                       'and typesetting industry. Lorem Ipsum has been the ' +
                       'industry\'s standard dummy text ever since the 1500s, ' +
                       'when an unknown printer took a galley of type and ' +
                       'scrambled it to make a type specimen book.',
-              style: Theme.of(context).textTheme.subtitle1.copyWith(
+              style: Theme.of(context).textTheme.subtitle1!.copyWith(
                     height: 1.2,
                   ),
             ),
@@ -296,7 +301,7 @@ class FeedsScreen extends StatelessWidget {
                       CircleAvatar(
                         radius: 15,
                         backgroundImage: NetworkImage(
-                          SocialCubit.get(context).userModel.image,
+                          SocialCubit.get(context).userModel!.image,
                         ),
                       ),
                       SizedBox(width: 12),
@@ -310,7 +315,7 @@ class FeedsScreen extends StatelessWidget {
                               'Write a comment...',
                               style: Theme.of(context)
                                   .textTheme
-                                  .caption
+                                  .caption!
                                   .copyWith(height: 1),
                             ),
                           ),

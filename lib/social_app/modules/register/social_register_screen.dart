@@ -88,16 +88,18 @@ class SocialRegisterScreen extends StatelessWidget {
                       children: [
                         Text(
                           'REGISTER',
-                          style: Theme.of(context).textTheme.headline4.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.headline4!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
                         ),
                         Text(
                           'Signup now to see your friends',
-                          style: Theme.of(context).textTheme.bodyText1.copyWith(
-                                color: Colors.grey,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyText1!.copyWith(
+                                    color: Colors.grey,
+                                  ),
                         ),
                         SizedBox(
                           height: 16,
@@ -106,7 +108,7 @@ class SocialRegisterScreen extends StatelessWidget {
                           controller: nameController,
                           type: TextInputType.name,
                           validate: (value) {
-                            if (value.isEmpty) return 'Please enter your name';
+                            if (value!.isEmpty) return 'Please enter your name';
                             return null;
                           },
                           label: 'Full Name',
@@ -119,7 +121,8 @@ class SocialRegisterScreen extends StatelessWidget {
                           controller: emailController,
                           type: TextInputType.emailAddress,
                           validate: (value) {
-                            if (value.isEmpty) return 'Please enter your email';
+                            if (value!.isEmpty)
+                              return 'Please enter your email';
                             return null;
                           },
                           label: 'Email Address',
@@ -132,7 +135,7 @@ class SocialRegisterScreen extends StatelessWidget {
                           controller: passwordController,
                           type: TextInputType.visiblePassword,
                           validate: (value) {
-                            if (value.isEmpty)
+                            if (value!.isEmpty)
                               return 'Please enter your password';
                             if (value.length < 6)
                               return 'Password at least 6 characters';
@@ -156,7 +159,8 @@ class SocialRegisterScreen extends StatelessWidget {
                           controller: phoneController,
                           type: TextInputType.phone,
                           validate: (value) {
-                            if (value.isEmpty) return 'Please enter your phone';
+                            if (value!.isEmpty)
+                              return 'Please enter your phone';
                             return null;
                           },
                           label: 'Phone',
@@ -193,7 +197,7 @@ class SocialRegisterScreen extends StatelessWidget {
   }
 
   void _submitForm(BuildContext context, SocialRegisterCubit registerCubit) {
-    if (formKey.currentState.validate()) {
+    if (formKey.currentState!.validate()) {
       registerCubit.userRegister(
         email: emailController.text,
         password: passwordController.text,

@@ -30,7 +30,7 @@ class SocialLoginScreen extends StatelessWidget {
           } else if (state is SocialLoginSuccessState) {
             SocialCacheHelper.saveData(
               key: 'uid',
-              value: FirebaseAuth.instance.currentUser.uid,
+              value: FirebaseAuth.instance.currentUser!.uid,
             ).then((value) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -65,14 +65,14 @@ class SocialLoginScreen extends StatelessWidget {
                   children: [
                     Text(
                       'LOGIN',
-                      style: Theme.of(context).textTheme.headline4.copyWith(
+                      style: Theme.of(context).textTheme.headline4!.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                     ),
                     Text(
                       'Login now to see your friends',
-                      style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             color: Colors.grey,
                           ),
                     ),
@@ -83,7 +83,7 @@ class SocialLoginScreen extends StatelessWidget {
                       controller: emailController,
                       type: TextInputType.emailAddress,
                       validate: (value) {
-                        if (value.isEmpty) return 'Please enter your email';
+                        if (value!.isEmpty) return 'Please enter your email';
                         return null;
                       },
                       label: 'Email Address',
@@ -96,7 +96,7 @@ class SocialLoginScreen extends StatelessWidget {
                       controller: passwordController,
                       type: TextInputType.visiblePassword,
                       validate: (value) {
-                        if (value.isEmpty) return 'Please enter your password';
+                        if (value!.isEmpty) return 'Please enter your password';
                         if (value.length < 6)
                           return 'Password at least 6 characters';
                         return null;
@@ -155,7 +155,7 @@ class SocialLoginScreen extends StatelessWidget {
       );
 
   void _submitForm(BuildContext context) {
-    if (formKey.currentState.validate()) {
+    if (formKey.currentState!.validate()) {
       SocialLoginCubit.get(context).userLogin(
         email: emailController.text,
         password: passwordController.text,

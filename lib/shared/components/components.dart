@@ -10,8 +10,8 @@ Widget defaultButton({
   Color background = Colors.blue,
   bool isUpperCase = true,
   double radius = 3.0,
-  @required VoidCallback onPressed,
-  @required String text,
+  required VoidCallback onPressed,
+  required String text,
 }) =>
     Container(
       width: width,
@@ -34,17 +34,17 @@ Widget defaultButton({
     );
 
 Widget defaultFormField({
-  @required TextEditingController controller,
-  @required TextInputType type,
-  ValueChanged<String> onSubmit,
-  ValueChanged<String> onChange,
+  required TextEditingController controller,
+  required TextInputType type,
+  ValueChanged<String>? onSubmit,
+  ValueChanged<String>? onChange,
   bool isPassword = false,
-  @required String Function(String) validate,
-  @required String label,
-  @required IconData prefix,
-  IconData suffix,
-  VoidCallback suffixPressed,
-  VoidCallback onTap,
+  required String? Function(String?) validate,
+  required String label,
+  required IconData prefix,
+  IconData? suffix,
+  VoidCallback? suffixPressed,
+  VoidCallback? onTap,
   bool readOnly = false,
 }) =>
     TextFormField(
@@ -74,9 +74,9 @@ Widget defaultFormField({
       ),
     );
 
-Widget buildTaskItem({Map<String, dynamic> model, BuildContext context}) =>
+Widget buildTaskItem({Map<String, dynamic>? model, BuildContext? context}) =>
     Dismissible(
-      key: ValueKey(model['id']),
+      key: ValueKey(model!['id']),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
@@ -124,7 +124,7 @@ Widget buildTaskItem({Map<String, dynamic> model, BuildContext context}) =>
                 color: Colors.green,
               ),
               onPressed: () {
-                AppCubit.get(context)
+                AppCubit.get(context!)
                     .updateRecord(status: 'Done', id: model['id']);
               },
             ),
@@ -137,7 +137,7 @@ Widget buildTaskItem({Map<String, dynamic> model, BuildContext context}) =>
                 color: Colors.black45,
               ),
               onPressed: () {
-                AppCubit.get(context)
+                AppCubit.get(context!)
                     .updateRecord(status: 'Archive', id: model['id']);
               },
             ),
@@ -145,7 +145,7 @@ Widget buildTaskItem({Map<String, dynamic> model, BuildContext context}) =>
         ),
       ),
       onDismissed: (direction) {
-        AppCubit.get(context).deleteRecord(id: model['id']);
+        AppCubit.get(context!).deleteRecord(id: model['id']);
       },
       background: Container(
         color: Colors.red,

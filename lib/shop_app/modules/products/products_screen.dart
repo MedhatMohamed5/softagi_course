@@ -17,7 +17,7 @@ class ProductsScreen extends StatelessWidget {
           if (state.message != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.message),
+                content: Text(state.message!),
               ),
             );
           }
@@ -40,9 +40,9 @@ class ProductsScreen extends StatelessWidget {
   }
 
   Widget _productsBuilder({
-    @required BuildContext context,
-    @required HomeModel homeModel,
-    @required CategoriesModel categoriesModel,
+    required BuildContext context,
+    required HomeModel homeModel,
+    required CategoriesModel categoriesModel,
   }) {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
@@ -59,7 +59,7 @@ class ProductsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _headerTitle('Categories'),
-                _categoriesList(categoriesModel.data.data),
+                _categoriesList(categoriesModel.data!.data!),
                 _headerTitle('New Products'),
               ],
             ),
@@ -101,7 +101,7 @@ class ProductsScreen extends StatelessWidget {
         alignment: AlignmentDirectional.bottomCenter,
         children: [
           Image(
-            image: NetworkImage(categoryModel.image),
+            image: NetworkImage(categoryModel.image!),
             fit: BoxFit.cover,
             height: 100,
             width: 100,
@@ -122,8 +122,7 @@ class ProductsScreen extends StatelessWidget {
     );
   }
 
-  Widget _gridView(
-      {@required BuildContext context, @required HomeModel model}) {
+  Widget _gridView({required BuildContext context, required HomeModel model}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: GridView.count(
@@ -134,16 +133,16 @@ class ProductsScreen extends StatelessWidget {
         crossAxisSpacing: 10,
         childAspectRatio: 1 / 1.58,
         children: List.generate(
-          model.data.products.length,
-          (index) =>
-              _productItem(context: context, model: model.data.products[index]),
+          model.data!.products.length,
+          (index) => _productItem(
+              context: context, model: model.data!.products[index]),
         ),
       ),
     );
   }
 
   Widget _productItem(
-      {@required BuildContext context, @required ProductModel model}) {
+      {required BuildContext context, required ProductModel model}) {
     // print('${model.name} - ${model.image}');
     return Card(
       child: Column(
@@ -213,7 +212,7 @@ class ProductsScreen extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         icon: CircleAvatar(
                           backgroundColor:
-                              ShopCubit.get(context).favorites[model.id]
+                              ShopCubit.get(context).favorites[model.id]!
                                   ? defaultColor
                                   : Colors.grey,
                           radius: 15,
@@ -259,9 +258,9 @@ class ProductsScreen extends StatelessWidget {
   }
 
   List<Widget> _bannersList(HomeModel model) {
-    return model.data.banners.map((item) {
+    return model.data!.banners.map((item) {
       return Image(
-        image: NetworkImage(item.image),
+        image: NetworkImage(item.image!),
         width: double.infinity,
         fit: BoxFit.cover,
       );

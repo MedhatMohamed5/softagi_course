@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class NativeCodeScreen extends StatefulWidget {
-  const NativeCodeScreen({Key key}) : super(key: key);
+  const NativeCodeScreen({Key? key}) : super(key: key);
 
   @override
   _NativeCodeScreenState createState() => _NativeCodeScreenState();

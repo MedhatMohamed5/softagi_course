@@ -1,15 +1,15 @@
 class PostModel {
-  String uid;
-  String userId;
-  String dateTime;
-  String text;
-  String postImage;
+  String? uid;
+  late String userId;
+  late String dateTime;
+  late String text;
+  String? postImage;
 
   PostModel({
     this.uid,
-    this.userId,
-    this.text,
-    this.dateTime,
+    required this.userId,
+    required this.text,
+    required this.dateTime,
     this.postImage,
   });
 
@@ -32,22 +32,22 @@ class PostModel {
 }
 
 class PostViewModel {
-  String uid;
-  String userName;
-  String userImage;
-  String dateTime;
-  String text;
-  String postImage;
-  int postLikes;
+  late String uid;
+  late String userName;
+  late String userImage;
+  late String dateTime;
+  late String text;
+  late String postImage;
+  late int postLikes;
 
   PostViewModel({
-    this.uid,
-    this.userName,
-    this.userImage,
-    this.text,
-    this.dateTime,
-    this.postImage,
-    this.postLikes,
+    required this.uid,
+    required this.userName,
+    required this.userImage,
+    required this.text,
+    required this.dateTime,
+    required this.postImage,
+    required this.postLikes,
   });
 
   PostViewModel.fromJson(String uid, Map<String, dynamic> json) {

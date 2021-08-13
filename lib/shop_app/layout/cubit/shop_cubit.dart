@@ -33,7 +33,7 @@ class ShopCubit extends Cubit<ShopStates> {
     emit(ShopChangeBottomNavState());
   }
 
-  HomeModel homeModel;
+  late HomeModel homeModel;
   Map<int, bool> favorites = {};
 
   void getHomeData() {
@@ -51,7 +51,7 @@ class ShopCubit extends Cubit<ShopStates> {
       // printWrapped(homeModel.data.banners[0].image);
       // printWrapped(homeModel.data.banners[0].id.toString());
 
-      homeModel.data.products.forEach((element) {
+      homeModel.data?.products.forEach((element) {
         favorites.putIfAbsent(element.id, () => element.inFavorites);
       });
       // favorites[52] = true;
@@ -62,7 +62,7 @@ class ShopCubit extends Cubit<ShopStates> {
     });
   }
 
-  CategoriesModel categoriesModel;
+  late CategoriesModel categoriesModel;
   void getCategoriesData() {
     emit(ShopGetCategoriesLoadingState());
 
@@ -75,14 +75,14 @@ class ShopCubit extends Cubit<ShopStates> {
       categoriesModel = CategoriesModel.fromJson(value.data);
 
       // printWrapped(value.data.toString());
-      printWrapped(categoriesModel.data.data[0].name);
+      printWrapped(categoriesModel.data?.data![0].name);
       emit(ShopGetCategoriesSucessState());
     }).catchError((error) {
       emit(ShopGetCategoriesErrorState(error));
     });
   }
 
-  FavoritesModel favoritesModel;
+  late FavoritesModel favoritesModel;
   void getFavoritesData() {
     emit(ShopGetFavoritesLoadingState());
 
@@ -95,16 +95,16 @@ class ShopCubit extends Cubit<ShopStates> {
       favoritesModel = FavoritesModel.fromJson(value.data);
 
       // printWrapped(value.data.toString());
-      printWrapped(favoritesModel.data.data[0].product.name);
+      printWrapped(favoritesModel.data?.data![0].product?.name);
       emit(ShopGetFavoritesSucessState());
     }).catchError((error) {
       emit(ShopGetFavoritesErrorState(error));
     });
   }
 
-  ChangeFavoriteModel changeFavoriteModel;
+  late ChangeFavoriteModel changeFavoriteModel;
   void changeFavorite(int productId) {
-    favorites[productId] = !favorites[productId];
+    favorites[productId] = !favorites[productId]!;
     emit(ShopToggleFavoriteSucessState());
     ShopDioHelper.postData(
       url: FAVORITES,
@@ -112,22 +112,23 @@ class ShopCubit extends Cubit<ShopStates> {
       authorizationToken: ShopCacheHelper.getData(key: 'token'),
     ).then((value) {
       changeFavoriteModel = ChangeFavoriteModel.fromJson(value.data);
-      if (!changeFavoriteModel.status) {
-        favorites[productId] = !favorites[productId];
+      if (!changeFavoriteModel.status!) {
+        favorites[productId] = !favorites[productId]!;
       } else {
         getFavoritesData();
       }
       print(value.data);
-      emit(ShopToggleFavoriteSucessState(message: changeFavoriteModel.message));
+      emit(
+          ShopToggleFavoriteSucessState(message: changeFavoriteModel.message!));
     }).catchError(
       (error) {
-        favorites[productId] = !favorites[productId];
+        favorites[productId] = !favorites[productId]!;
         emit(ShopToggleFavoriteErrorState(error));
       },
     );
   }
 
-  ShopLoginModel userModel;
+  late ShopLoginModel userModel;
   void getUserData() {
     emit(ShopGetUserLoadingState());
 
@@ -140,7 +141,7 @@ class ShopCubit extends Cubit<ShopStates> {
       userModel = ShopLoginModel.fromJson(value.data);
 
       // printWrapped(value.data.toString());
-      printWrapped(userModel.data.name);
+      printWrapped(userModel.data?.name);
       emit(ShopGetUserSucessState(userModel));
     }).catchError((error) {
       emit(ShopGetUserErrorState(error));
@@ -159,7 +160,7 @@ class ShopCubit extends Cubit<ShopStates> {
       userModel = ShopLoginModel.fromJson(value.data);
 
       // printWrapped(value.data.toString());
-      printWrapped(userModel.data.name);
+      printWrapped(userModel.data?.name);
       emit(ShopUpdateUserSucessState(userModel));
     }).catchError((error) {
       emit(ShopUpdateUserErrorState(error));

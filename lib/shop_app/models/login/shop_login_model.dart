@@ -1,7 +1,7 @@
 class ShopLoginModel {
-  bool status;
-  String message;
-  ShopUserData data;
+  bool? status;
+  String? message;
+  ShopUserData? data;
 
   ShopLoginModel({
     this.status,
@@ -17,14 +17,14 @@ class ShopLoginModel {
 }
 
 class ShopUserData {
-  int id;
-  String name;
-  String email;
-  String phone;
-  String image;
-  int points;
-  int credit;
-  String token;
+  int? id;
+  String? name;
+  String? email;
+  String? phone;
+  String? image;
+  int? points;
+  int? credit;
+  String? token;
 
   ShopUserData({
     this.id,

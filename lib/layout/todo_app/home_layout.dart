@@ -52,7 +52,7 @@ class HomeLayout extends StatelessWidget {
                   : Icon(Icons.add),
               onPressed: () async {
                 if (blocCubit.isBottomSheetShown) {
-                  if (formKey.currentState.validate()) {
+                  if (formKey.currentState!.validate()) {
                     await blocCubit.insertToDatabase(
                         title: titleController.text,
                         time: timeController.text,
@@ -83,7 +83,7 @@ class HomeLayout extends StatelessWidget {
                   }
                 } else {
                   {
-                    scaffoldKey.currentState
+                    scaffoldKey.currentState!
                         .showBottomSheet(
                           (context) => Container(
                             child: Padding(
@@ -97,7 +97,7 @@ class HomeLayout extends StatelessWidget {
                                       controller: titleController,
                                       type: TextInputType.text,
                                       validate: (value) {
-                                        if (value.isEmpty)
+                                        if (value!.isEmpty)
                                           return 'title must not be empty';
                                         return null;
                                       },
@@ -118,12 +118,12 @@ class HomeLayout extends StatelessWidget {
                                         ).then((value) {
                                           if (value != null) {
                                             timeController.text =
-                                                value?.format(context);
+                                                value.format(context);
                                           }
                                         });
                                       },
                                       validate: (value) {
-                                        if (value.isEmpty)
+                                        if (value!.isEmpty)
                                           return 'time must not be empty';
                                         return null;
                                       },
@@ -154,7 +154,7 @@ class HomeLayout extends StatelessWidget {
                                         });
                                       },
                                       validate: (value) {
-                                        if (value.isEmpty)
+                                        if (value!.isEmpty)
                                           return 'date must not be empty';
                                         return null;
                                       },

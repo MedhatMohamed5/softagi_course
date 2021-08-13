@@ -22,17 +22,17 @@ class SocialCubit extends Cubit<SocialStates> {
   SocialCubit() : super(SocialInitState());
   static SocialCubit get(context) => BlocProvider.of<SocialCubit>(context);
 
-  SocialUserModel userModel;
+  SocialUserModel? userModel;
   void getUserData() {
     emit(SocialGetUserLoadingState());
     FirebaseFirestore.instance
         .collection('users')
-        .doc(FirebaseAuth.instance.currentUser.uid)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
         .get()
         .then((value) {
       print(value.id);
       print(value.data());
-      userModel = SocialUserModel.fromJson(value.id, value.data());
+      userModel = SocialUserModel.fromJson(value.id, value.data()!);
       emit(SocialGetUserSuccessState());
     }).catchError((error) {
       print(error.toString());
@@ -100,14 +100,14 @@ class SocialCubit extends Cubit<SocialStates> {
   }
 
   final ImagePicker picker = ImagePicker();
-  File profileImage;
+  File? profileImage;
   String profileImageUrl = '';
 
   Future getProfileImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       profileImage = File(pickedFile.path);
-      print(profileImage.path);
+      print(profileImage!.path);
       emit(SocialProfileImageSuccessState());
     } else {
       print('No Image Selected');
@@ -115,14 +115,14 @@ class SocialCubit extends Cubit<SocialStates> {
     }
   }
 
-  File coverImage;
+  File? coverImage;
   String coverImageUrl = '';
 
   Future getCoverImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       coverImage = File(pickedFile.path);
-      print(coverImage.path);
+      print(coverImage!.path);
       emit(SocialCoverImageSuccessState());
     } else {
       print('No Image Selected');
@@ -134,9 +134,9 @@ class SocialCubit extends Cubit<SocialStates> {
     if (profileImage != null) {
       var ref = fireStorage.FirebaseStorage.instance
           .ref()
-          .child('users/${Uri.file(profileImage.path).pathSegments.last}');
+          .child('users/${Uri.file(profileImage!.path).pathSegments.last}');
       try {
-        await ref.putFile(profileImage);
+        await ref.putFile(profileImage!);
         String downloadUrl = await ref.getDownloadURL();
         if (downloadUrl.isNotEmpty) {
           profileImageUrl = downloadUrl;
@@ -157,9 +157,9 @@ class SocialCubit extends Cubit<SocialStates> {
     if (coverImage != null) {
       var ref = fireStorage.FirebaseStorage.instance
           .ref()
-          .child('users/${Uri.file(coverImage.path).pathSegments.last}');
+          .child('users/${Uri.file(coverImage!.path).pathSegments.last}');
       try {
-        await ref.putFile(coverImage);
+        await ref.putFile(coverImage!);
 
         String downloadUrl = await ref.getDownloadURL();
         if (downloadUrl.isNotEmpty) {
@@ -178,9 +178,9 @@ class SocialCubit extends Cubit<SocialStates> {
   }
 
   Future<void> updateUser({
-    @required String name,
-    @required String bio,
-    @required String phone,
+    required String name,
+    required String bio,
+    required String phone,
   }) async {
     emit(SocialUpdateUserLoadingState());
     await uploadProfileImage();
@@ -195,19 +195,19 @@ class SocialCubit extends Cubit<SocialStates> {
     print("Mine  In update $coverImageUrl");
     print("Mine  In update $profileImageUrl");
     model = SocialUserModel(
-      email: userModel.email,
+      email: userModel!.email,
       phone: phone,
       bio: bio,
       name: name,
       coverImage:
-          coverImageUrl.isNotEmpty ? coverImageUrl : userModel.coverImage,
-      image: profileImageUrl.isNotEmpty ? profileImageUrl : userModel.image,
-      isEmailVerified: userModel.isEmailVerified,
+          coverImageUrl.isNotEmpty ? coverImageUrl : userModel!.coverImage,
+      image: profileImageUrl.isNotEmpty ? profileImageUrl : userModel!.image,
+      isEmailVerified: userModel!.isEmailVerified,
     );
 
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(FirebaseAuth.instance.currentUser.uid)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
         .update(model.toJson())
         .then((value) {
       resetImages();
@@ -229,7 +229,7 @@ class SocialCubit extends Cubit<SocialStates> {
     coverImageUrl = '';
   }
 
-  Future<void> createNewPost({@required PostModel post}) async {
+  Future<void> createNewPost({required PostModel post}) async {
     emit(CreatePostLodingState());
     await uploadPostImage();
 
@@ -249,14 +249,14 @@ class SocialCubit extends Cubit<SocialStates> {
     });
   }
 
-  File postImage;
+  File? postImage;
   String postImageUrl = '';
 
   Future getPostImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       postImage = File(pickedFile.path);
-      print(postImage.path);
+      print(postImage!.path);
       emit(SocialPostImageSuccessState());
     } else {
       print('No Image Selected');
@@ -274,9 +274,9 @@ class SocialCubit extends Cubit<SocialStates> {
     if (postImage != null) {
       var ref = fireStorage.FirebaseStorage.instance
           .ref()
-          .child('posts/${Uri.file(postImage.path).pathSegments.last}');
+          .child('posts/${Uri.file(postImage!.path).pathSegments.last}');
       try {
-        await ref.putFile(postImage);
+        await ref.putFile(postImage!);
         String downloadUrl = await ref.getDownloadURL();
         if (downloadUrl.isNotEmpty) {
           postImageUrl = downloadUrl;
@@ -321,7 +321,7 @@ class SocialCubit extends Cubit<SocialStates> {
                 uid: element.id,
                 postImage: post['postImage'] ?? '',
                 text: post['text'] ?? '',
-                userImage: userData['image'] ?? '',
+                userImage: userData!['image'] ?? '',
                 userName: userData['name'] ?? '',
                 dateTime: post['dateTime'] ?? '',
                 postLikes: likesList.length,
@@ -329,7 +329,7 @@ class SocialCubit extends Cubit<SocialStates> {
             );
           } else {
             var existed = existedPosts.first;
-            existed.userImage = userData['image'] ?? '';
+            existed.userImage = userData!['image'] ?? '';
             existed.postLikes = likesList.length;
           }
           emit(SocialGetPostsSuccessState());
@@ -343,13 +343,13 @@ class SocialCubit extends Cubit<SocialStates> {
     }
   }
 
-  Future<void> likePost({@required String postId}) async {
+  Future<void> likePost({required String postId}) async {
     try {
       await FirebaseFirestore.instance
           .collection('posts')
           .doc(postId)
           .collection('likes')
-          .doc(userModel.uid)
+          .doc(userModel!.uid)
           .set({'like': true});
       emit(SocialPostLikeSuccessState());
     } catch (err) {
@@ -369,7 +369,7 @@ class SocialCubit extends Cubit<SocialStates> {
 
           print("Get All Users -- $user");
           if (users.where((eleme) => eleme.uid == element.id).isEmpty &&
-              element.id != userModel.uid)
+              element.id != userModel!.uid)
             users.add(SocialUserModel.fromJson(element.id, user));
           emit(SocialGetAllUsersSuccessState());
         });
@@ -383,26 +383,26 @@ class SocialCubit extends Cubit<SocialStates> {
   }
 
   Future<void> sendMessage({
-    @required String recieverId,
-    @required String dateTime,
-    @required String message,
+    required String recieverId,
+    required String dateTime,
+    required String message,
   }) async {
     ChatMessageModel model = ChatMessageModel(
       message: message,
       dateTime: dateTime,
       recieverId: recieverId,
-      senderId: userModel.uid,
+      senderId: userModel!.uid!,
     );
     try {
       var senderMessageDoc = await FirebaseFirestore.instance
           .collection('users')
-          .doc(userModel.uid)
+          .doc(userModel!.uid)
           .collection('chats')
           .doc(recieverId)
           .collection('messages')
           .add(model.toJson());
 
-      if (senderMessageDoc.id != null) {
+      if (senderMessageDoc.id.isNotEmpty) {
         emit(SocialSendMessageSuccessState());
       } else {
         emit(SocialSendMessageErrorState(
@@ -413,11 +413,11 @@ class SocialCubit extends Cubit<SocialStates> {
           .collection('users')
           .doc(recieverId)
           .collection('chats')
-          .doc(userModel.uid)
+          .doc(userModel!.uid)
           .collection('messages')
           .add(model.toJson());
 
-      if (reciverMessageDoc.id != null) {
+      if (reciverMessageDoc.id.isNotEmpty) {
         emit(SocialSendMessageSuccessState());
       } else {
         emit(SocialSendMessageErrorState(
@@ -430,10 +430,10 @@ class SocialCubit extends Cubit<SocialStates> {
 
   List<ChatMessageModel> messages = [];
 
-  void getMessages({@required String recieverId}) {
+  void getMessages({required String recieverId}) {
     FirebaseFirestore.instance
         .collection('users')
-        .doc(userModel.uid)
+        .doc(userModel!.uid)
         .collection('chats')
         .doc(recieverId)
         .collection('messages')

@@ -35,7 +35,7 @@ class SearchScreen extends StatelessWidget {
                             controller: searchController,
                             type: TextInputType.text,
                             validate: (value) {
-                              if (value.isEmpty)
+                              if (value!.isEmpty)
                                 return 'Please enter what you want to search for';
                               return null;
                             },

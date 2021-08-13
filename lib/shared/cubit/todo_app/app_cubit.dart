@@ -10,7 +10,7 @@ import 'package:udemy_flutter/shared/network/local/cache_helper.dart';
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitialState());
 
-  Database database;
+  late Database database;
   List<Map<String, dynamic>> newTasks = [];
   List<Map<String, dynamic>> doneTasks = [];
   List<Map<String, dynamic>> archivedTasks = [];
@@ -59,9 +59,9 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   Future insertToDatabase({
-    @required String title,
-    @required String time,
-    @required String date,
+    required String title,
+    required String time,
+    required String date,
   }) async {
     try {
       await database.transaction(
@@ -105,8 +105,8 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   void updateRecord({
-    @required String status,
-    @required int id,
+    required String status,
+    required int id,
   }) {
     database.rawUpdate('UPDATE tasks SET status = ? WHERE id = ?',
         ['$status', id]).then((value) {
@@ -116,7 +116,7 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   void deleteRecord({
-    @required int id,
+    required int? id,
   }) {
     database.rawDelete('Delete FROM tasks WHERE id = ?', [id]).then((value) {
       getDataFromDatabase(database);
@@ -125,7 +125,7 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   bool isDark = false;
-  void changeAppMode({bool fromShared}) {
+  void changeAppMode({bool? fromShared}) {
     if (fromShared != null) {
       isDark = fromShared;
       emit(AppChangeModeState());

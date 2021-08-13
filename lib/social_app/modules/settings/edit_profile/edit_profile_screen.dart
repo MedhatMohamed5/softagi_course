@@ -6,7 +6,7 @@ import 'package:udemy_flutter/social_app/shared/components/components.dart';
 import 'package:udemy_flutter/social_app/shared/styles/icon_broken.dart';
 
 class EditProfileScreen extends StatelessWidget {
-  EditProfileScreen({Key key}) : super(key: key);
+  EditProfileScreen({Key? key}) : super(key: key);
 
   final nameController = TextEditingController();
   final bioController = TextEditingController();
@@ -59,17 +59,17 @@ class EditProfileScreen extends StatelessWidget {
     var coverImage = socialCubit.coverImage;
 
     nameController.text =
-        nameController.text.isEmpty ? userModel.name : nameController.text;
+        nameController.text.isEmpty ? userModel!.name : nameController.text;
     nameController.selection = TextSelection.fromPosition(
         TextPosition(offset: nameController.text.length));
 
     bioController.text =
-        bioController.text.isEmpty ? userModel.bio : bioController.text;
+        bioController.text.isEmpty ? userModel!.bio : bioController.text;
     bioController.selection = TextSelection.fromPosition(
         TextPosition(offset: bioController.text.length));
 
     phoneController.text =
-        phoneController.text.isEmpty ? userModel.phone : phoneController.text;
+        phoneController.text.isEmpty ? userModel!.phone : phoneController.text;
     phoneController.selection = TextSelection.fromPosition(
         TextPosition(offset: phoneController.text.length));
 
@@ -104,9 +104,9 @@ class EditProfileScreen extends StatelessWidget {
                             fit: BoxFit.cover,
                             image: coverImage == null
                                 ? NetworkImage(
-                                    userModel.coverImage,
+                                    userModel!.coverImage,
                                   )
-                                : FileImage(coverImage),
+                                : FileImage(coverImage) as ImageProvider,
                           ),
                         ),
                       ),
@@ -137,9 +137,9 @@ class EditProfileScreen extends StatelessWidget {
                         radius: 50,
                         backgroundImage: profileImage == null
                             ? NetworkImage(
-                                userModel.image,
+                                userModel!.image,
                               )
-                            : FileImage(profileImage),
+                            : FileImage(profileImage) as ImageProvider,
                       ),
                     ),
                     IconButton(
@@ -169,7 +169,7 @@ class EditProfileScreen extends StatelessWidget {
             controller: nameController,
             type: TextInputType.name,
             validate: (value) {
-              if (value.isEmpty) return 'Name must not be empty';
+              if (value!.isEmpty) return 'Name must not be empty';
               return null;
             },
             label: 'Name',
@@ -182,7 +182,7 @@ class EditProfileScreen extends StatelessWidget {
             controller: phoneController,
             type: TextInputType.phone,
             validate: (value) {
-              if (value.isEmpty) return 'Phone is required';
+              if (value!.isEmpty) return 'Phone is required';
               return null;
             },
             label: 'phone',

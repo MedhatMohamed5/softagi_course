@@ -1,7 +1,7 @@
 class CategoriesModel {
-  bool status;
-  String message;
-  CategoriesDataModel data;
+  late bool status;
+  late String message;
+  CategoriesDataModel? data;
 
   CategoriesModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -13,18 +13,18 @@ class CategoriesModel {
 }
 
 class CategoriesDataModel {
-  List<CategoryModel> data = [];
-  int currentPage;
-  String firstPageUrl;
-  String lastPageUrl;
-  String nextPageUrl;
-  int from;
-  int to;
-  int total;
-  int lastPage;
-  String path;
-  int perPage;
-  String prevPageUrl;
+  List<CategoryModel>? data = [];
+  int? currentPage;
+  String? firstPageUrl;
+  String? lastPageUrl;
+  String? nextPageUrl;
+  int? from;
+  int? to;
+  int? total;
+  int? lastPage;
+  String? path;
+  int? perPage;
+  String? prevPageUrl;
 
   CategoriesDataModel.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
@@ -40,15 +40,15 @@ class CategoriesDataModel {
     prevPageUrl = json['prev_page_url'];
 
     json['data']?.forEach((element) {
-      data.add(CategoryModel.fromJson(element));
+      data?.add(CategoryModel.fromJson(element));
     });
   }
 }
 
 class CategoryModel {
-  int id;
-  String name;
-  String image;
+  late int id;
+  late String name;
+  String? image;
 
   CategoryModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];

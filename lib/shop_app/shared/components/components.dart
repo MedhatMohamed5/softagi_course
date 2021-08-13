@@ -34,8 +34,8 @@ Widget defaultButton({
   Color background = defaultColor,
   bool isUpperCase = true,
   double radius = 3.0,
-  @required VoidCallback onPressed,
-  @required String text,
+  required VoidCallback onPressed,
+  required String text,
 }) =>
     Container(
       width: width,
@@ -58,17 +58,17 @@ Widget defaultButton({
     );
 
 Widget defaultFormField({
-  @required TextEditingController controller,
-  @required TextInputType type,
-  ValueChanged<String> onSubmit,
-  ValueChanged<String> onChange,
+  required TextEditingController controller,
+  required TextInputType type,
+  ValueChanged<String>? onSubmit,
+  ValueChanged<String>? onChange,
   bool isPassword = false,
-  @required String Function(String) validate,
-  @required String label,
-  @required IconData prefix,
-  IconData suffix,
-  VoidCallback suffixPressed,
-  VoidCallback onTap,
+  required String? Function(String?) validate,
+  required String label,
+  required IconData prefix,
+  IconData? suffix,
+  VoidCallback? suffixPressed,
+  VoidCallback? onTap,
   bool readOnly = false,
   TextCapitalization textCapitalization = TextCapitalization.sentences,
 }) =>
@@ -99,9 +99,9 @@ Widget defaultFormField({
       ),
     );
 
-Future<bool> showToast({
-  @required String message,
-  @required Color backgroundColor,
+Future<bool?> showToast({
+  required String message,
+  required Color backgroundColor,
 }) =>
     Fluttertoast.showToast(
       msg: message,
@@ -123,8 +123,8 @@ void signOut(BuildContext context) =>
     );
 
 Widget buildPrdouctListItem({
-  @required BuildContext context,
-  @required ProductModel product,
+  required BuildContext context,
+  required ProductModel product,
   bool showFav = true,
 }) {
   return Padding(
@@ -219,7 +219,7 @@ Widget _showFavRow(ProductModel product, BuildContext context) {
       IconButton(
         padding: EdgeInsets.zero,
         icon: CircleAvatar(
-          backgroundColor: ShopCubit.get(context).favorites[product.id]
+          backgroundColor: ShopCubit.get(context).favorites[product.id]!
               ? defaultColor
               : Colors.grey,
           radius: 15,

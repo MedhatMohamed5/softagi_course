@@ -23,19 +23,19 @@ class ShopRegisterScreen extends StatelessWidget {
       child: BlocConsumer<ShopRegisterCubit, ShopRegisterStates>(
         listener: (context, state) {
           if (state is ShopRegisterSuccessState) {
-            if (state.loginModel.status) {
+            if (state.loginModel.status!) {
               print(state.loginModel.message);
-              print(state.loginModel.data.token);
+              print(state.loginModel.data!.token);
 
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(state.loginModel.message),
+                  content: Text(state.loginModel.message!),
                   backgroundColor: defaultColor,
                 ),
               );
               ShopCacheHelper.saveData(
                 key: 'token',
-                value: state.loginModel.data.token,
+                value: state.loginModel.data!.token,
               );
 
               navigateToReplacement(
@@ -46,7 +46,7 @@ class ShopRegisterScreen extends StatelessWidget {
               print(state.loginModel.message);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(state.loginModel.message),
+                  content: Text(state.loginModel.message!),
                   backgroundColor: errorColor,
                 ),
               );
@@ -72,16 +72,18 @@ class ShopRegisterScreen extends StatelessWidget {
                       children: [
                         Text(
                           'REGISTER',
-                          style: Theme.of(context).textTheme.headline4.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.headline4!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
                         ),
                         Text(
                           'Signup now to see our hot offers',
-                          style: Theme.of(context).textTheme.bodyText1.copyWith(
-                                color: Colors.grey,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyText1!.copyWith(
+                                    color: Colors.grey,
+                                  ),
                         ),
                         SizedBox(
                           height: 16,
@@ -90,7 +92,7 @@ class ShopRegisterScreen extends StatelessWidget {
                           controller: nameController,
                           type: TextInputType.name,
                           validate: (value) {
-                            if (value.isEmpty) return 'Please enter your name';
+                            if (value!.isEmpty) return 'Please enter your name';
                             return null;
                           },
                           label: 'Full Name',
@@ -103,7 +105,8 @@ class ShopRegisterScreen extends StatelessWidget {
                           controller: emailController,
                           type: TextInputType.emailAddress,
                           validate: (value) {
-                            if (value.isEmpty) return 'Please enter your email';
+                            if (value!.isEmpty)
+                              return 'Please enter your email';
                             return null;
                           },
                           label: 'Email Address',
@@ -116,7 +119,7 @@ class ShopRegisterScreen extends StatelessWidget {
                           controller: passwordController,
                           type: TextInputType.visiblePassword,
                           validate: (value) {
-                            if (value.isEmpty)
+                            if (value!.isEmpty)
                               return 'Please enter your password';
                             if (value.length < 6)
                               return 'Password at least 6 characters';
@@ -140,7 +143,8 @@ class ShopRegisterScreen extends StatelessWidget {
                           controller: phoneController,
                           type: TextInputType.phone,
                           validate: (value) {
-                            if (value.isEmpty) return 'Please enter your phone';
+                            if (value!.isEmpty)
+                              return 'Please enter your phone';
                             return null;
                           },
                           label: 'Phone',
@@ -175,7 +179,7 @@ class ShopRegisterScreen extends StatelessWidget {
   }
 
   void _submitForm(BuildContext context, ShopRegisterCubit registerCubit) {
-    if (formKey.currentState.validate()) {
+    if (formKey.currentState!.validate()) {
       registerCubit.userRegister(
         email: emailController.text,
         password: passwordController.text,

@@ -37,7 +37,7 @@ class SearchScreen extends StatelessWidget {
                     }
                   },
                   validator: (value) {
-                    if (value.isEmpty) {
+                    if (value!.isEmpty) {
                       return "Please enter some thing to search";
                     }
                     return null;
@@ -83,14 +83,14 @@ class SearchScreen extends StatelessWidget {
   Widget _buildResultView(SearchCubit searchCubit, BuildContext context) {
     return Expanded(
       child: ConditionalBuilder(
-        condition: searchCubit.searchModel.data.data.length > 0,
+        condition: searchCubit.searchModel.data!.data!.length > 0,
         builder: (context) => ListView.builder(
           itemBuilder: (context, index) => buildPrdouctListItem(
             context: context,
-            product: searchCubit.searchModel.data.data[index],
+            product: searchCubit.searchModel.data!.data![index],
             showFav: false,
           ),
-          itemCount: searchCubit.searchModel.data.data.length,
+          itemCount: searchCubit.searchModel.data!.data!.length,
         ),
         fallback: (context) => Center(
           child: Text(
